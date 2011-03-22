@@ -1,3 +1,13 @@
+2011-03-22  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF:
+
+	2011-03-21  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	gcc/
+	* config/arm/unwind-arm.c (__gnu_unwind_pr_common): Correct test
+	for barrier handlers.
+
 2011-03-13  Andrew Stubbs  <ams@codesourcery.com>
 
 	Merge from FSF GCC 4.6 (trunk svn 170846).
