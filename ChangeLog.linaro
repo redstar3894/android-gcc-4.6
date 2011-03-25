@@ -1,0 +1,78 @@
+2011-03-03  Andrew Stubbs  <ams@codesourcery.com>
+
+	GCC Linaro 4.6-2011.03-0 released.
+
+	gcc/
+	* LINARO-VERSION: Update.
+
+2011-02-02  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* config/arm/predicates.md (neon_lane_number): Accept 0..15.
+
+	gcc/testsuite/
+	* gcc.target/arm/neon-vld-1.c: New test.
+
+2011-02-02  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	PR target/47551
+	* config/arm/arm.c (coproc_secondary_reload_class): Handle
+	structure modes.  Don't check neon_vector_mem_operand for
+	vector or structure modes.
+
+	gcc/testsuite/
+	PR target/47551
+	* gcc.target/arm/neon-modes-2.c: New test.
+
+2011-02-28  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge from FSF GCC 4.6 (trunk svn 170492).
+
+2011-02-25  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge from FSF GCC 4.6 (trunk svn 170356).
+
+2011-02-21  Andrew Stubbs  <ams@codesourcery.com>
+	    Julian Brown  <julian@codesourcery.com>
+	    Mark Shinwell  <shinwell@codesourcery.com>
+
+	Forward-ported from Linaro GCC 4.5 (bzr99324).
+
+	gcc/
+	* config/arm/arm.h (arm_class_likely_spilled_p): Check against
+	LO_REGS only for Thumb-1.
+	(MODE_BASE_REG_CLASS): Restrict base registers to those which can
+	be used in short instructions when optimising for size on Thumb-2.
+
+2011-02-19  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merged from Linaro GCC 4.5 (bzr99409).
+
+	2010-09-30  Jie Zhang  <jie@codesourcery.com>
+
+	gcc/testsuite/
+	* gcc.target/arm/neon-thumb2-move.c: Add
+	dg-require-effective-target arm_thumb2_ok.
+
+2011-02-19  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merged from Linaro GCC 4.5 (bzr99325).
+
+	2006-04-21  Kazu Hirata  <kazu@codesourcery.com>
+
+	gcc/testsuite/
+	* gcc.target/arm/vfp-ldmdbd.c, gcc.target/arm/vfp-ldmdbs.c,
+	gcc.target/arm/vfp-ldmiad.c, gcc.target/arm/vfp-ldmias.c,
+	gcc.target/arm/vfp-stmdbd.c, gcc.target/arm/vfp-stmdbs.c,
+	gcc.target/arm/vfp-stmiad.c, gcc.target/arm/vfp-stmias.c: New.
+
+2011-02-19  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* configure: Regenerate.
+	* configure.ac (PKGVERSION): Set default to a custom
+	Linaro string.
+	* LINARO-VERSION: New file.
+
+Imported GCC from FSF trunk SVN revision 170067.
