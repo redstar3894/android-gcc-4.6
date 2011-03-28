@@ -1569,13 +1569,6 @@ iterative_hash_template_arg (tree arg, hashval_t val)
       val = iterative_hash_object (code, val);
       return iterative_hash_template_arg (TREE_OPERAND (arg, 2), val);
 
-    case ARRAY_TYPE:
-      /* layout_type sets structural equality for arrays of
-	 incomplete type, so we can't rely on the canonical type
-	 for hashing.  */
-      val = iterative_hash_template_arg (TREE_TYPE (arg), val);
-      return iterative_hash_template_arg (TYPE_DOMAIN (arg), val);
-
     case LAMBDA_EXPR:
       /* A lambda can't appear in a template arg, but don't crash on
 	 erroneous input.  */
@@ -10955,11 +10948,21 @@ tsubst (tree t, tree args, tsubst_flags_t complain, tree in_decl)
 	if (TREE_CODE (f) != TYPENAME_TYPE)
 	  {
 	    if (TYPENAME_IS_ENUM_P (t) && TREE_CODE (f) != ENUMERAL_TYPE)
-	      error ("%qT resolves to %qT, which is not an enumeration type",
-		     t, f);
+	      {
+		if (complain & tf_error)
+		  error ("%qT resolves to %qT, which is not an enumeration type",
+			 t, f);
+		else
+		  return error_mark_node;
+	      }
 	    else if (TYPENAME_IS_CLASS_P (t) && !CLASS_TYPE_P (f))
-	      error ("%qT resolves to %qT, which is is not a class type",
-		     t, f);
+	      {
+		if (complain & tf_error)
+		  error ("%qT resolves to %qT, which is is not a class type",
+			 t, f);
+		else
+		  return error_mark_node;
+	      }
 	  }
 
 	return cp_build_qualified_type_real
