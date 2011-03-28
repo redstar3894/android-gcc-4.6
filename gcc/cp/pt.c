@@ -5314,7 +5314,8 @@ convert_nontype_argument (tree type, tree expr, tsubst_flags_t complain)
 
   /* Add the ADDR_EXPR now for the benefit of
      value_dependent_expression_p.  */
-  if (TYPE_PTROBV_P (type))
+  if (TYPE_PTROBV_P (type)
+      && TREE_CODE (TREE_TYPE (expr)) == ARRAY_TYPE)
     expr = decay_conversion (expr);
 
   /* If we are in a template, EXPR may be non-dependent, but still
@@ -5402,11 +5403,19 @@ convert_nontype_argument (tree type, tree expr, tsubst_flags_t complain)
 	{
 	  if (complain & tf_error)
 	    {
-	      error ("%qE is not a valid template argument for type %qT "
-		     "because it is a non-constant expression", expr, type);
-	      cxx_constant_value (expr);
+	      int errs = errorcount, warns = warningcount;
+	      expr = cxx_constant_value (expr);
+	      if (errorcount > errs || warningcount > warns)
+		inform (EXPR_LOC_OR_HERE (expr),
+			"in template argument for type %qT ", type);
+	      if (expr == error_mark_node)
+		return NULL_TREE;
+	      /* else cxx_constant_value complained but gave us
+		 a real constant, so go ahead.  */
+	      gcc_assert (TREE_CODE (expr) == INTEGER_CST);
 	    }
-	  return NULL_TREE;
+	  else
+	    return NULL_TREE;
 	}
     }
   /* [temp.arg.nontype]/5, bullet 2
@@ -11727,7 +11736,9 @@ tsubst_copy (tree t, tree args, tsubst_flags_t complain, tree in_decl)
       return t;
 
     default:
-      gcc_unreachable ();
+      /* We shouldn't get here, but keep going if !ENABLE_CHECKING.  */
+      gcc_checking_assert (false);
+      return t;
     }
 }
 
@@ -12984,7 +12995,7 @@ tsubst_copy_and_build (tree t,
       return finish_pseudo_destructor_expr
 	(RECUR (TREE_OPERAND (t, 0)),
 	 RECUR (TREE_OPERAND (t, 1)),
-	 RECUR (TREE_OPERAND (t, 2)));
+	 tsubst (TREE_OPERAND (t, 2), args, complain, in_decl));
 
     case TREE_LIST:
       {
@@ -15677,6 +15688,9 @@ unify (tree tparms, tree targs, tree parm, tree arg, int strict)
       return 1;
 
     default:
+      /* An unresolved overload is a nondeduced context.  */
+      if (type_unknown_p (parm))
+	return 0;
       gcc_assert (EXPR_P (parm));
 
       /* We must be looking at an expression.  This can happen with
@@ -17214,8 +17228,13 @@ instantiate_decl (tree d, int defer_ok,
   if (!pattern_defined && expl_inst_class_mem_p
       && DECL_EXPLICIT_INSTANTIATION (d))
     {
-      DECL_NOT_REALLY_EXTERN (d) = 0;
-      DECL_INTERFACE_KNOWN (d) = 0;
+      /* Leave linkage flags alone on instantiations with anonymous
+	 visibility.  */
+      if (TREE_PUBLIC (d))
+	{
+	  DECL_NOT_REALLY_EXTERN (d) = 0;
+	  DECL_INTERFACE_KNOWN (d) = 0;
+	}
       SET_DECL_IMPLICIT_INSTANTIATION (d);
     }
 

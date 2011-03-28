@@ -1,3 +1,79 @@
+2011-03-09  Jason Merrill  <jason@redhat.com>
+
+	PR c++/44629
+	* pt.c (unify): An unresolved overload is a nondeduced context.
+
+2011-03-09  Martin Jambor  <mjambor@suse.cz>
+
+	PR tree-optimization/47714
+	* method.c (use_thunk): Clear addressable flag of thunk arguments.
+
+2011-03-08  Dodji Seketeli  <dodji@redhat.com>
+
+	PR c++/47705
+	* pt.c (convert_nontype_argument): Only call decay_conversion on
+	arrays.
+
+2011-03-08  Jason Merrill  <jason@redhat.com>
+
+	PR c++/47488
+	* mangle.c (write_template_arg_literal) [STRING_CST]: Sorry.
+
+	PR c++/47705
+	* pt.c (convert_nontype_argument): Don't crash on non-pointer
+	argument to pointer parameter.
+
+	PR c++/45651
+	* pt.c (instantiate_decl): Don't clear DECL_INTERFACE_KNOWN on
+	!TREE_PUBLIC decls.
+
+2011-03-08  Dodji Seketeli  <dodji@redhat.com>
+
+	PR c++/47957
+	* name-lookup.c (binding_to_template_parms_of_scope_p): Only
+	consider scopes of primary template definitions.  Adjust comments.
+
+2011-03-07  Jason Merrill  <jason@redhat.com>
+
+	PR c++/48003
+	* pt.c (convert_nontype_argument): Fix -fpermissive allowing
+	integer overflow.
+	* semantics.c (potential_constant_expression_1): Check TREE_OVERFLOW.
+
+	PR c++/48015
+	* init.c (constant_value_1): Always require init to be TREE_CONSTANT.
+
+	PR c++/48008
+	* mangle.c (write_type): Strip cv-quals from FUNCTION_TYPE here.
+	(write_CV_qualifiers_for_type): Not here.
+
+2011-03-06  Joseph Myers  <joseph@codesourcery.com>
+
+	* lang-specs.h: Match -save-temps* instead of -save-temps.
+
+2011-03-05  Jason Merrill  <jason@redhat.com>
+
+	* mangle.c (write_expression): Change ABI v6 to v5.
+	(write_type): Likewise.
+
+2011-03-04  Jan Hubicka  <jh@suse.cz>
+
+	PR lto/47497
+	* optimize.c (maybe_clone_body): Update call of cgraph_same_body_alias
+	and cgraph_add_thunk.
+	* method.c (make_alias_for_thunk, use_thunk): Likewise.
+	* mangle.c (mangle_decl): Likewise.
+
+2011-03-04  Jason Merrill  <jason@redhat.com>
+
+	PR c++/47971
+	* pt.c (tsubst_copy_and_build) [PSEUDO_DTOR_EXPR]: Use tsubst for type.
+	(tsubst_copy) [default]: Just return t if !ENABLE_CHECKING.
+
+	PR c++/46220
+	* search.c (check_final_overrider): Allow pointer to same incomplete
+	class type with different cv-quals.
+
 2011-03-03  Paolo Carlini  <paolo.carlini@oracle.com>
 
 	PR c++/47974

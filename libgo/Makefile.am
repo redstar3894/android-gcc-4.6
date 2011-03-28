@@ -787,8 +787,15 @@ go_sync_files = \
 go_sync_c_files = \
 	go/sync/cas.c
 
+if LIBGO_IS_SOLARIS
+go_syslog_file = go/syslog/syslog_solaris.go
+else
+go_syslog_file = go/syslog/syslog_unix.go
+endif
+
 go_syslog_files = \
-	go/syslog/syslog.go
+	go/syslog/syslog.go \
+	$(go_syslog_file)
 
 go_tabwriter_files = \
 	go/tabwriter/tabwriter.go
@@ -1201,6 +1208,18 @@ else
 syscall_socket_epoll_file =
 endif
 
+# Support for uname.
+if LIBGO_IS_SOLARIS
+if LIBGO_IS_386
+# 32-bit Solaris 2/x86 needs _nuname, handled in syscall_solaris_386.go.
+syscall_uname_file =
+else # !LIBGO_IS_386 && LIBGO_IS_SOLARIS
+syscall_uname_file = syscalls/syscall_uname.go
+endif
+else # !LIBGO_IS_SOLARIS
+syscall_uname_file = syscalls/syscall_uname.go
+endif
+
 syscall_arch.go: s-syscall_arch; @true
 s-syscall_arch: Makefile
 	rm -f syscall_arch.go.tmp
@@ -1222,6 +1241,7 @@ go_syscall_files = \
 	$(syscall_socket_os_file) \
 	$(syscall_socket_epoll_file) \
 	$(syscall_syscall_file) \
+	$(syscall_uname_file) \
 	syscalls/syscall_unix.go \
 	syscalls/stringbyte.go \
 	syscalls/syscall_$(GOOS).go \
@@ -1772,10 +1792,14 @@ sync/check: $(CHECK_DEPS)
 	$(CHECK)
 .PHONY: sync/check
 
-syslog/libsyslog.$(OBJEXT): $(go_syslog_files) fmt.gox log.gox net.gox os.gox
-	$(BUILDPACKAGE)
-syslog/libsyslog.lo: syslog/libsyslog.$(OBJEXT)
-syslog/libsyslog.la: syslog/libsyslog.lo
+syslog/syslog.$(OBJEXT): $(go_syslog_files) fmt.gox log.gox net.gox os.gox \
+		syscall.gox
+	test -d syslog || $(MKDIR_P) syslog
+	$(LTGOCOMPILE) -I . -c -o $@ -fgo-prefix=libgo_syslog $(srcdir)/go/syslog/syslog.go $(srcdir)/$(go_syslog_file)
+syslog/syslog_c.$(OBJEXT): $(srcdir)/go/syslog/syslog_c.c syslog/syslog.$(OBJEXT)
+	$(LTCOMPILE) -c -o $@ $(srcdir)/go/syslog/syslog_c.c
+syslog/libsyslog.la: syslog/syslog.$(OBJEXT) syslog/syslog_c.$(OBJEXT)
+	$(LINK) syslog/syslog.lo syslog/syslog_c.lo
 syslog/check: $(CHECK_DEPS)
 	$(CHECK)
 .PHONY: syslog/check
@@ -2720,7 +2744,7 @@ strings.gox: strings/libstrings.$(OBJEXT)
 	$(BUILDGOX)
 sync.gox: sync/mutex.$(OBJEXT)
 	$(BUILDGOX)
-syslog.gox: syslog/libsyslog.$(OBJEXT)
+syslog.gox: syslog/syslog.$(OBJEXT)
 	$(BUILDGOX)
 syscall.gox: syscalls/syscall.$(OBJEXT)
 	$(BUILDGOX)
@@ -2939,13 +2963,13 @@ TEST_PACKAGES = \
 	fmt/check \
 	gob/check \
 	html/check \
-	http/check \
+	$(if $(GCCGO_RUN_ALL_TESTS),http/check) \
 	io/check \
 	json/check \
 	log/check \
 	math/check \
 	mime/check \
-	net/check \
+	$(if $(GCCGO_RUN_ALL_TESTS),net/check) \
 	netchan/check \
 	os/check \
 	patch/check \
@@ -2961,7 +2985,7 @@ TEST_PACKAGES = \
 	strconv/check \
 	strings/check \
 	sync/check \
-	syslog/check \
+	$(if $(GCCGO_RUN_ALL_TESTS),syslog/check) \
 	tabwriter/check \
 	template/check \
 	time/check \
