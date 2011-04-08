@@ -60,6 +60,8 @@ static void create_ddg_dep_no_link (ddg_ptr, ddg_node_ptr, ddg_node_ptr,
 static ddg_edge_ptr create_ddg_edge (ddg_node_ptr, ddg_node_ptr, dep_type,
 				     dep_data_type, int, int);
 static void add_edge_to_ddg (ddg_ptr g, ddg_edge_ptr);
+static ddg_node_ptr get_node_of_insn_uid (ddg_ptr, int);
+
 
 /* Auxiliary variable for mem_read_insn_p/mem_write_insn_p.  */
 static bool mem_ref_p;
@@ -488,12 +490,65 @@ build_intra_loop_deps (ddg_ptr g)
   sched_free_deps (head, tail, false);
 }
 
+/* Given DOLOOP_INSNS which holds the instructions that
+   belong to the do-loop part; mark closing_branch_deps field in ddg G
+   as TRUE if the do-loop part's instructions are dependent on the other
+   loop instructions.  Otherwise mark it as FALSE.  */
+static void
+check_closing_branch_deps (ddg_ptr g, sbitmap doloop_insns)
+{
+  sbitmap_iterator sbi;
+  unsigned int u = 0;
+
+  EXECUTE_IF_SET_IN_SBITMAP (doloop_insns, 0, u, sbi)
+  {
+    ddg_edge_ptr e;
+    ddg_node_ptr u_node = get_node_of_insn_uid (g, u);
+
+    gcc_assert (u_node);
+
+    for (e = u_node->in; e != 0; e = e->next_in)
+      {
+	ddg_node_ptr v_node = e->src;
+
+	if (((unsigned int) INSN_UID (v_node->insn) == u)
+	    || DEBUG_INSN_P (v_node->insn))
+	  continue;
+	
+	/* Ignore dependencies between memory writes and the
+	   jump.  */
+	if (JUMP_P (u_node->insn)
+	    && e->type == OUTPUT_DEP 
+            && mem_write_insn_p (v_node->insn))
+	  continue;
+	if (!TEST_BIT (doloop_insns, INSN_UID (v_node->insn)))
+	  {
+	    g->closing_branch_deps = 1;
+	    return;
+	  }
+      }
+    for (e = u_node->out; e != 0; e = e->next_out)
+      {
+	ddg_node_ptr v_node = e->dest;
+
+	if (((unsigned int) INSN_UID (v_node->insn) == u)
+            || DEBUG_INSN_P (v_node->insn))
+	  continue;
+	if (!TEST_BIT (doloop_insns, INSN_UID (v_node->insn)))
+	  {
+	    g->closing_branch_deps = 1;
+	    return;
+	  }
+      }
+  }
+  g->closing_branch_deps = 0;
+}
 
 /* Given a basic block, create its DDG and return a pointer to a variable
    of ddg type that represents it.
    Initialize the ddg structure fields to the appropriate values.  */
 ddg_ptr
-create_ddg (basic_block bb, int closing_branch_deps)
+create_ddg (basic_block bb, sbitmap doloop_insns)
 {
   ddg_ptr g;
   rtx insn, first_note;
@@ -503,7 +558,6 @@ create_ddg (basic_block bb, int closing_branch_deps)
   g = (ddg_ptr) xcalloc (1, sizeof (struct ddg));
 
   g->bb = bb;
-  g->closing_branch_deps = closing_branch_deps;
 
   /* Count the number of insns in the BB.  */
   for (insn = BB_HEAD (bb); insn != NEXT_INSN (BB_END (bb));
@@ -576,6 +630,11 @@ create_ddg (basic_block bb, int closing_branch_deps)
   /* Build the data dependency graph.  */
   build_intra_loop_deps (g);
   build_inter_loop_deps (g);
+
+  /* Check whether the do-loop part is decoupled from the other loop
+     instructions.  */
+  check_closing_branch_deps (g, doloop_insns);
+
   return g;
 }
 
@@ -865,6 +924,18 @@ get_node_of_insn (ddg_ptr g, rtx insn)
 
   for (i = 0; i < g->num_nodes; i++)
     if (insn == g->nodes[i].insn)
+      return &g->nodes[i];
+  return NULL;
+}
+
+/* Given the uid of an instruction UID return the node that represents it.  */
+static ddg_node_ptr
+get_node_of_insn_uid (ddg_ptr g, int uid)
+{
+  int i;
+
+  for (i = 0; i < g->num_nodes; i++)
+    if (uid == INSN_UID (g->nodes[i].insn))
       return &g->nodes[i];
   return NULL;
 }

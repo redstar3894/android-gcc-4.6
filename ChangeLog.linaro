@@ -12,6 +12,67 @@
 	* expr.c (expand_expr_real_1): Only use BLKmode for volatile
 	accesses which are not naturally aligned.
 
+2011-03-27  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* doc/invoke.texi (max-stores-to-sink): Document.
+	* params.h (MAX_STORES_TO_SINK): Define.
+	* opts.c (finish_options): Set MAX_STORES_TO_SINK to 0
+	if either vectorization or if-conversion is disabled.
+	* tree-data-ref.c (dr_equal_offsets_p1): Moved and renamed from
+	tree-vect-data-refs.c vect_equal_offsets.
+	(dr_equal_offsets_p): New function.
+	(find_data_references_in_bb): Remove static.
+	* tree-data-ref.h (find_data_references_in_bb): Declare.
+	(dr_equal_offsets_p): Likewise.
+	* tree-vect-data-refs.c (vect_equal_offsets): Move to tree-data-ref.c.
+	(vect_drs_dependent_in_basic_block): Update calls to
+	vect_equal_offsets.
+	(vect_check_interleaving): Likewise.
+	* tree-ssa-phiopt.c: Include cfgloop.h and tree-data-ref.h.
+	(cond_if_else_store_replacement): Rename to...
+	(cond_if_else_store_replacement_1): ... this.  Change arguments and
+	documentation.
+	(cond_if_else_store_replacement): New function.
+	* Makefile.in (tree-ssa-phiopt.o): Adjust dependencies.
+	* params.def (PARAM_MAX_STORES_TO_SINK): Define.
+
+	gcc/testsuite/
+	* gcc.dg/vect/vect-cselim-1.c: New test.
+	* gcc.dg/vect/vect-cselim-2.c: New test.
+
+2011-03-27  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
+	* loop-doloop.c (doloop_condition_get): Support new form of
+	doloop pattern and use prev_nondebug_insn instead of PREV_INSN.
+	* config/arm/thumb2.md (*thumb2_addsi3_compare0): Remove "*".
+	(doloop_end): New.
+	* config/arm/arm.md (*addsi3_compare0): Remove "*".
+	* ddg.c (check_closing_branch_deps, get_node_of_insn_uid):
+	New functions.
+	(create_ddg): Pass sbitmap containing do-loop related
+	instructions instead of closing_branch_deps parameter and call
+	check_closing_branch_deps function.
+	* ddg.h (create_ddg): Adjust the function declaration.
+	* modulo-sched.c (PS_STAGE_COUNT): Rename to CALC_STAGE_COUNT
+	and redefine.
+	(doloop_register_get): Handle NONDEBUG_INSN_P.
+	(stage_count): New field in struct partial_schedule.
+	(mark_doloop_insns, calculate_stage_count): New functions.
+	(normalize_sched_times): Rename to reset_sched_times and handle
+	incrementing the sched time of the nodes by a constant value
+	passed as parameter.
+	(duplicate_insns_of_cycles): Skip closing branch.
+	(sms_schedule_by_order): Schedule closing branch when
+	closing_branch_deps is true.
+	(ps_insn_find_column): Handle closing branch.
+	(sms_schedule): Call reset_sched_times and handle case where
+	do-loop pattern is not decoupled from the other loop instructions.
+	Support new form of doloop pattern.
+	(ps_insert_empty_row): Update calls to normalize_sched_times
+	and rotate_partial_schedule functions.
+
 2011-03-26  Andrew Stubbs  <ams@codesourcery.com>
 
 	Merge from FSF GCC 4.6 (svn branches/gcc-4_6-branch 171336).
