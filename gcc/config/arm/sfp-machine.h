@@ -99,7 +99,7 @@ typedef int __gcc_CMPtype __attribute__ ((mode (__libgcc_cmp_return__)));
 #define __fixdfdi	__aeabi_d2lz
 #define __fixunsdfdi	__aeabi_d2ulz
 #define __floatdidf	__aeabi_l2d
-#define __extendhfsf2	__gnu_h2f_ieee
-#define __truncsfhf2	__gnu_f2h_ieee
+#define __extendhfsf2	__aeabi_h2f
+#define __truncsfhf2	__aeabi_f2h
 
 #endif /* __ARM_EABI__ */

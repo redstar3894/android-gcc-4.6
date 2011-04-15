@@ -22,10 +22,10 @@
    see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
    <http://www.gnu.org/licenses/>.  */
 
-static inline unsigned short
+static inline unsigned int
 __gnu_f2h_internal(unsigned int a, int ieee)
 {
-  unsigned short sign = (a >> 16) & 0x8000;
+  unsigned int sign = (a >> 16) & 0x8000;
   int aexp = (a >> 23) & 0xff;
   unsigned int mantissa = a & 0x007fffff;
   unsigned int mask;
@@ -95,10 +95,10 @@ __gnu_f2h_internal(unsigned int a, int ieee)
   return sign | (((aexp + 14) << 10) + (mantissa >> 13));
 }
 
-unsigned int
-__gnu_h2f_internal(unsigned short a, int ieee)
+static inline unsigned int
+__gnu_h2f_internal(unsigned int a, int ieee)
 {
-  unsigned int sign = (unsigned int)(a & 0x8000) << 16;
+  unsigned int sign = (a & 0x00008000) << 16;
   int aexp = (a >> 10) & 0x1f;
   unsigned int mantissa = a & 0x3ff;
 
@@ -120,26 +120,33 @@ __gnu_h2f_internal(unsigned short a, int ieee)
   return sign | (((aexp + 0x70) << 23) + (mantissa << 13));
 }
 
-unsigned short
+#define ALIAS(src, dst) \
+  typeof (src) dst __attribute__ ((alias (#src)));
+
+unsigned int
 __gnu_f2h_ieee(unsigned int a)
 {
   return __gnu_f2h_internal(a, 1);
 }
+ALIAS (__gnu_f2h_ieee, __aeabi_f2h)
 
 unsigned int
-__gnu_h2f_ieee(unsigned short a)
+__gnu_h2f_ieee(unsigned int a)
 {
   return __gnu_h2f_internal(a, 1);
 }
+ALIAS (__gnu_h2f_ieee, __aeabi_h2f)
 
-unsigned short
+unsigned int
 __gnu_f2h_alternative(unsigned int x)
 {
   return __gnu_f2h_internal(x, 0);
 }
+ALIAS (__gnu_f2h_alternative, __aeabi_f2h_alt)
 
 unsigned int
-__gnu_h2f_alternative(unsigned short a)
+__gnu_h2f_alternative(unsigned int a)
 {
   return __gnu_h2f_internal(a, 0);
 }
+ALIAS (__gnu_h2f_alternative, __aeabi_h2f_alt)

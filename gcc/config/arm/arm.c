@@ -1190,12 +1190,12 @@ arm_init_libfuncs (void)
       /* Conversions.  */
       set_conv_libfunc (trunc_optab, HFmode, SFmode,
 			(arm_fp16_format == ARM_FP16_FORMAT_IEEE
-			 ? "__gnu_f2h_ieee"
-			 : "__gnu_f2h_alternative"));
+			 ? "__aeabi_f2h"
+			 : "__aeabi_f2h_alt"));
       set_conv_libfunc (sext_optab, SFmode, HFmode, 
 			(arm_fp16_format == ARM_FP16_FORMAT_IEEE
-			 ? "__gnu_h2f_ieee"
-			 : "__gnu_h2f_alternative"));
+			 ? "__aeabi_h2f"
+			 : "__aeabi_h2f_alt"));
       
       /* Arithmetic.  */
       set_optab_libfunc (add_optab, HFmode, NULL);

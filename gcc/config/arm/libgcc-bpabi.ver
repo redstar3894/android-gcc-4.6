@@ -106,3 +106,10 @@ GCC_3.5 {
 GCC_4.3.0 {
   _Unwind_Backtrace
 }
+
+GCC_4.7.0 {
+  __aeabi_f2h
+  __aeabi_f2h_alt
+  __aeabi_h2f
+  __aeabi_h2f_alt
+}
