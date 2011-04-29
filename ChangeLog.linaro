@@ -1,3 +1,36 @@
+2011-04-28  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from FSF:
+
+	2011-03-27  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* config/arm/arm.c (arm_autovectorize_vector_sizes): New function.
+	(TARGET_VECTORIZE_AUTOVECTORIZE_VECTOR_SIZES): Define.
+
+	gcc/testsuite/
+	* gcc.dg/vect/vect-outer-5.c: Reduce the distance between data
+	accesses to preserve the meaning of the test for doubleword vectors.
+	* gcc.dg/vect/no-vfa-pr29145.c: Likewise.
+	* gcc.dg/vect/slp-3.c: Reduce the loop bound for the same reason.
+
+2011-04-27  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from FSF:
+
+	2011-04-03  Richard Guenther  <rguenther@suse.de>
+		    Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-if-conv.c (memrefs_read_or_written_unconditionally): Strip all
+	non-variable offsets and compare the remaining bases of the two
+	accesses instead of looking for exact same data-ref.
+
+	gcc/testsuite/
+	* gcc.dg/vect/if-cvt-stores-vect-ifcvt-18.c: New test.
+	* gcc.dg/vect/vect.exp: Run if-cvt-stores-vect* tests with
+	-ftree-loop-if-convert-stores.
+
 2011-04-26  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from FSF:
@@ -26,7 +59,6 @@
 	gcc/
 	* combine.c (combine_simplify_rtx): Avoid mis-simplifying conditionals
 	for STORE_FLAG_VALUE==-1 case.
-
 
 2011-04-21  Andrew Stubbs  <ams@codesourcery.com>
 
