@@ -2,6 +2,17 @@
 
 	Backport from FSF:
 
+	2011-04-05  Tom de Vries  <tom@codesourcery.com>
+
+	PR target/43920
+	gcc/
+	* config/arm/arm.h (BRANCH_COST): Set to 1 for Thumb-2 when optimizing
+	for size.
+
+2011-04-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF:
+
 	2011-04-15  Maxim Kuvyrkov  <maxim@codesourcery.com>
 
 	gcc/
