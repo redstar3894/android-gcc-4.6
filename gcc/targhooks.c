@@ -1519,4 +1519,15 @@ const struct default_options empty_optimization_table[] =
     { OPT_LEVELS_NONE, 0, NULL, 0 }
   };
 
+bool
+default_legitimate_constant_p (enum machine_mode mode ATTRIBUTE_UNUSED,
+			       rtx x ATTRIBUTE_UNUSED)
+{
+#ifdef LEGITIMATE_CONSTANT_P
+  return LEGITIMATE_CONSTANT_P (x);
+#else
+  return true;
+#endif
+}
+
 #include "gt-targhooks.h"

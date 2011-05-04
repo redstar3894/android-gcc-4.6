@@ -1,3 +1,122 @@
+2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	From  Richard Earnshaw  <rearnsha@arm.com>
+
+	PR target/46329
+	* gcc.target/arm/pr46329.c: New test.
+
+	gcc/
+	PR target/46329
+	* config/arm/arm.c (arm_legitimate_constant_p_1): Return false
+	for all Neon struct constants.
+
+2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* targhooks.h (default_legitimate_constant_p); Declare.
+	* targhooks.c (default_legitimate_constant_p): New function.
+
+	Backport from mainline:
+	2011-04-21  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* target.def (legitimate_constant_p): New hook.
+	* doc/tm.texi.in (LEGITIMATE_CONSTANT_P): Replace with...
+	(TARGET_LEGITIMATE_CONSTANT_P): ...this.
+	* doc/tm.texi: Regenerate.
+	* calls.c (precompute_register_parameters): Replace uses of
+	LEGITIMATE_CONSTANT_P with targetm.legitimate_constant_p.
+	(emit_library_call_value_1): Likewise.
+	* expr.c (move_block_to_reg, can_store_by_pieces, emit_move_insn)
+	(compress_float_constant, emit_push_insn, expand_expr_real_1): Likewise.
+	* recog.c (general_operand, immediate_operand): Likewise.
+	* reload.c (find_reloads_toplev, find_reloads_address_part): Likewise.
+	* reload1.c (init_eliminable_invariants): Likewise.
+
+	* config/arm/arm-protos.h (arm_cannot_force_const_mem): Delete.
+	* config/arm/arm.h (ARM_LEGITIMATE_CONSTANT_P): Likewise.
+	(THUMB_LEGITIMATE_CONSTANT_P, LEGITIMATE_CONSTANT_P): Likewise.
+	* config/arm/arm.c (TARGET_LEGITIMATE_CONSTANT_P): Define.
+	(arm_legitimate_constant_p_1, thumb_legitimate_constant_p)
+	(arm_legitimate_constant_p): New functions.
+	(arm_cannot_force_const_mem): Make static.
+
+2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* hooks.h (hook_bool_mode_uhwi_false): Declare.
+	* hooks.c (hook_bool_mode_uhwi_false): New function.
+	* target.def (array_mode_supported_p): New hook.
+	* doc/tm.texi.in (TARGET_ARRAY_MODE_SUPPORTED_P): Add @hook.
+	* doc/tm.texi: Regenerate.
+	* stor-layout.c (mode_for_array): New function.
+	(layout_type): Use it.
+	* config/arm/arm.c (arm_array_mode_supported_p): New function.
+	(TARGET_ARRAY_MODE_SUPPORTED_P): Define.
+
+2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-12  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* config/arm/arm.c (arm_print_operand): Use MEM_SIZE to get the
+	size of a '%A' memory reference.
+	(T_DREG, T_QREG): New neon_builtin_type_bits.
+	(arm_init_neon_builtins): Assert that the load and store operands
+	are neon_struct_operands.
+	(locate_neon_builtin_icode): Provide the neon_builtin_type_bits.
+	(NEON_ARG_MEMORY): New builtin_arg.
+	(neon_dereference_pointer): New function.
+	(arm_expand_neon_args): Add a neon_builtin_type_bits argument.
+	Handle NEON_ARG_MEMORY.
+	(arm_expand_neon_builtin): Update after above interface changes.
+	Use NEON_ARG_MEMORY for loads and stores.
+	* config/arm/predicates.md (neon_struct_operand): New predicate.
+	* config/arm/iterators.md (V_two_elem): Tweak formatting.
+	(V_three_elem): Use BLKmode for accesses that have no associated mode.
+	(V_four_elem): Tweak formatting.
+	* config/arm/neon.md (neon_vld1<mode>, neon_vld1_dup<mode>)
+	(neon_vst1_lane<mode>, neon_vst1<mode>, neon_vld2<mode>)
+	(neon_vld2_lane<mode>, neon_vld2_dup<mode>, neon_vst2<mode>)
+	(neon_vst2_lane<mode>, neon_vld3<mode>, neon_vld3_lane<mode>)
+	(neon_vld3_dup<mode>, neon_vst3<mode>, neon_vst3_lane<mode>)
+	(neon_vld4<mode>, neon_vld4_lane<mode>, neon_vld4_dup<mode>)
+	(neon_vst4<mode>): Replace pointer operand with a memory operand.
+	Use %A in the output template.
+	(neon_vld3qa<mode>, neon_vld3qb<mode>, neon_vst3qa<mode>)
+	(neon_vst3qb<mode>, neon_vld4qa<mode>, neon_vld4qb<mode>)
+	(neon_vst4qa<mode>, neon_vst4qb<mode>): Likewise, but halve
+	the width of the memory access.  Remove post-increment.
+	* config/arm/neon-testgen.ml: Allow addresses to have an alignment.
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-04-12  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.target/arm/neon-vld3-1.c: New test.
+	* gcc.target/arm/neon-vst3-1.c: New test.
+	* gcc.target/arm/neon/v*.c: Regenerate.
+
+2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-03-30  Richard Sandiford  <richard.sandiford@linaro.org>
+		    Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	PR target/43590
+	* config/arm/neon.md (neon_vld3qa<mode>, neon_vld4qa<mode>): Remove
+	operand 1 and reshuffle the operands to match.
+	(neon_vld3<mode>, neon_vld4<mode>): Update accordingly.
+
 2011-05-04  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	Backport from mainline:
