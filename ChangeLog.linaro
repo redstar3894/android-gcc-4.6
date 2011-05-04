@@ -2,6 +2,15 @@
 
 	Backport from mainline:
 
+	2011-05-04  Sergey Grechanik  <mouseentity@ispras.ru>
+
+	* config/arm/arm.c (coproc_secondary_reload_class): Return NO_REGS
+	for constant vectors.
+
+2011-05-04  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	Backport from mainline:
+
 	2011-03-29  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	PR debug/48190
