@@ -1,3 +1,46 @@
+2011-05-04  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	Backport from mainline:
+
+	2011-03-29  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	PR debug/48190
+	* dwarf2out.c (dw_loc_list_node): Add resolved_addr and replaced.
+	(cached_dw_loc_list_def): New structure.
+	(cached_dw_loc_list): New typedef.
+	(cached_dw_loc_list_table): New variable.
+	(cached_dw_loc_list_table_hash): New function.
+	(cached_dw_loc_list_table_eq): Likewise.
+	(add_location_or_const_value_attribute): Take a bool cache_p.
+	Cache the list when the parameter is true.
+	(gen_formal_parameter_die): Update caller.
+	(gen_variable_die): Likewise.
+	(dwarf2out_finish): Likewise.
+	(dwarf2out_abstract_function): Nullify cached_dw_loc_list_table
+	while generating debug info for the decl.
+	(dwarf2out_function_decl): Clear cached_dw_loc_list_table.
+	(dwarf2out_init): Initialize cached_dw_loc_list_table.
+	(resolve_addr): Cache the result of resolving a chain of
+	location lists.
+
+2011-04-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF:
+
+	2011-04-15  Maxim Kuvyrkov  <maxim@codesourcery.com>
+
+	gcc/
+	* combine.c (subst, combine_simlify_rtx): Add new argument, use it
+	to track processing of conditionals.  Update all callers.
+	(try_combine, simplify_if_then_else): Update.
+
+	2011-04-25  Maxim Kuvyrkov  <maxim@codesourcery.com>
+		    Eric Botcazou <ebotcazou@adacore.com>
+
+	gcc/
+	* combine.c (combine_simplify_rtx): Avoid mis-simplifying conditionals
+	for STORE_FLAG_VALUE==-1 case.
+
 2011-04-28  Ira Rosen  <ira.rosen@linaro.org>
 
 	Backport from FSF:
