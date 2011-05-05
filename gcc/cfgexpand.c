@@ -1839,11 +1839,16 @@ expand_gimple_cond (basic_block bb, gimple stmt)
 static void
 expand_call_stmt (gimple stmt)
 {
-  tree exp;
-  tree lhs = gimple_call_lhs (stmt);
+  tree exp, lhs;
   size_t i;
   bool builtin_p;
   tree decl;
+
+  if (gimple_call_internal_p (stmt))
+    {
+      expand_internal_call (stmt);
+      return;
+    }
 
   exp = build_vl_exp (CALL_EXPR, gimple_call_num_args (stmt) + 3);
 
@@ -1882,6 +1887,7 @@ expand_call_stmt (gimple stmt)
   SET_EXPR_LOCATION (exp, gimple_location (stmt));
   TREE_BLOCK (exp) = gimple_block (stmt);
 
+  lhs = gimple_call_lhs (stmt);
   if (lhs)
     expand_assignment (lhs, exp, false);
   else

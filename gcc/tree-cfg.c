@@ -3046,7 +3046,26 @@ verify_gimple_call (gimple stmt)
   tree fntype;
   unsigned i;
 
-  if (TREE_CODE (fn) != OBJ_TYPE_REF
+  if (gimple_call_internal_p (stmt))
+    {
+      if (fn)
+	{
+	  error ("gimple call has two targets");
+	  debug_generic_stmt (fn);
+	  return true;
+	}
+    }
+  else
+    {
+      if (!fn)
+	{
+	  error ("gimple call has no target");
+	  return true;
+	}
+    }
+
+  if (fn
+      && TREE_CODE (fn) != OBJ_TYPE_REF
       && !is_gimple_val (fn))
     {
       error ("invalid function in gimple call");
@@ -3054,9 +3073,10 @@ verify_gimple_call (gimple stmt)
       return true;
     }
 
-  if (!POINTER_TYPE_P (TREE_TYPE  (fn))
-      || (TREE_CODE (TREE_TYPE (TREE_TYPE (fn))) != FUNCTION_TYPE
-	  && TREE_CODE (TREE_TYPE (TREE_TYPE (fn))) != METHOD_TYPE))
+  if (fn
+      && (!POINTER_TYPE_P (TREE_TYPE  (fn))
+	  || (TREE_CODE (TREE_TYPE (TREE_TYPE (fn))) != FUNCTION_TYPE
+	      && TREE_CODE (TREE_TYPE (TREE_TYPE (fn))) != METHOD_TYPE)))
     {
       error ("non-function in gimple call");
       return true;
@@ -3076,8 +3096,12 @@ verify_gimple_call (gimple stmt)
       return true;
     }
 
-  fntype = TREE_TYPE (TREE_TYPE (fn));
-  if (gimple_call_lhs (stmt)
+  if (fn)
+    fntype = TREE_TYPE (TREE_TYPE (fn));
+  else
+    fntype = NULL_TREE;
+  if (fntype
+      && gimple_call_lhs (stmt)
       && !useless_type_conversion_p (TREE_TYPE (gimple_call_lhs (stmt)),
 				     TREE_TYPE (fntype))
       /* ???  At least C++ misses conversions at assignments from
@@ -4130,9 +4154,10 @@ verify_stmt (gimple_stmt_iterator *gsi)
      didn't see a function declaration before the call.  */
   if (is_gimple_call (stmt))
     {
-      tree decl;
+      tree fn, decl;
 
-      if (!is_gimple_call_addr (gimple_call_fn (stmt)))
+      fn = gimple_call_fn (stmt);
+      if (fn && !is_gimple_call_addr (fn))
 	{
 	  error ("invalid function in call statement");
 	  return true;
@@ -7483,6 +7508,8 @@ do_warn_unused_result (gimple_seq seq)
 
 	case GIMPLE_CALL:
 	  if (gimple_call_lhs (g))
+	    break;
+	  if (gimple_call_internal_p (g))
 	    break;
 
 	  /* This is a naked call, as opposed to a GIMPLE_CALL with an

@@ -2657,11 +2657,13 @@ compute_antic (void)
 }
 
 /* Return true if we can value number the call in STMT.  This is true
-   if we have a pure or constant call.  */
+   if we have a pure or constant call to a real function.  */
 
 static bool
 can_value_number_call (gimple stmt)
 {
+  if (gimple_call_internal_p (stmt))
+    return false;
   if (gimple_call_flags (stmt) & (ECF_PURE | ECF_CONST))
     return true;
   return false;
@@ -4187,6 +4189,7 @@ eliminate (void)
   gimple_stmt_iterator gsi;
   gimple stmt;
   unsigned i;
+  tree fn;
 
   FOR_EACH_BB (b)
     {
@@ -4378,9 +4381,10 @@ eliminate (void)
 	  /* Visit indirect calls and turn them into direct calls if
 	     possible.  */
 	  if (is_gimple_call (stmt)
-	      && TREE_CODE (gimple_call_fn (stmt)) == SSA_NAME)
+	      && (fn = gimple_call_fn (stmt))
+	      && TREE_CODE (fn) == SSA_NAME)
 	    {
-	      tree fn = VN_INFO (gimple_call_fn (stmt))->valnum;
+	      fn = VN_INFO (fn)->valnum;
 	      if (TREE_CODE (fn) == ADDR_EXPR
 		  && TREE_CODE (TREE_OPERAND (fn, 0)) == FUNCTION_DECL)
 		{

@@ -3471,10 +3471,13 @@ estimate_num_insns (gimple stmt, eni_weights *weights)
       {
 	tree decl = gimple_call_fndecl (stmt);
 	tree addr = gimple_call_fn (stmt);
-	tree funtype = TREE_TYPE (addr);
+	tree funtype = NULL_TREE;
 	bool stdarg = false;
 
-	if (POINTER_TYPE_P (funtype))
+	if (addr)
+	  funtype = TREE_TYPE (addr);
+
+	if (funtype && POINTER_TYPE_P (funtype))
 	  funtype = TREE_TYPE (funtype);
 
 	/* Do not special case builtins where we see the body.
@@ -3514,7 +3517,7 @@ estimate_num_insns (gimple stmt, eni_weights *weights)
 	if (decl)
 	  funtype = TREE_TYPE (decl);
 
-	if (!VOID_TYPE_P (TREE_TYPE (funtype)))
+	if (funtype && !VOID_TYPE_P (TREE_TYPE (funtype)))
 	  cost += estimate_move_cost (TREE_TYPE (funtype));
 
 	if (funtype)

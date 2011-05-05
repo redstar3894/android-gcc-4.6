@@ -30,6 +30,7 @@ along with GCC; see the file COPYING3.  If not see
 #include "basic-block.h"
 #include "tree-ssa-operands.h"
 #include "tree-ssa-alias.h"
+#include "internal-fn.h"
 
 struct gimple_seq_node_d;
 typedef struct gimple_seq_node_d *gimple_seq_node;
@@ -82,6 +83,8 @@ enum gimple_rhs_class
 			   name, a _DECL, a _REF, etc.  */
 };
 
+#define GF_CALL_INTERNAL_FN_SHIFT 8
+
 /* Specific flags for individual GIMPLE statements.  These flags are
    always stored in gimple_statement_base.subcode and they may only be
    defined for statement codes that do not use sub-codes.
@@ -102,6 +105,8 @@ enum gf_mask {
     GF_CALL_TAILCALL		= 1 << 3,
     GF_CALL_VA_ARG_PACK		= 1 << 4,
     GF_CALL_NOTHROW		= 1 << 5,
+    GF_CALL_INTERNAL		= 1 << 6,
+    GF_CALL_INTERNAL_FN		= 0xff << GF_CALL_INTERNAL_FN_SHIFT,
     GF_OMP_PARALLEL_COMBINED	= 1 << 0,
 
     /* True on an GIMPLE_OMP_RETURN statement if the return does not require
@@ -817,6 +822,8 @@ gimple gimple_build_debug_bind_stat (tree, tree, gimple MEM_STAT_DECL);
 
 gimple gimple_build_call_vec (tree, VEC(tree, heap) *);
 gimple gimple_build_call (tree, unsigned, ...);
+gimple gimple_build_call_internal (enum internal_fn, unsigned, ...);
+gimple gimple_build_call_internal_vec (enum internal_fn, VEC(tree, heap) *);
 gimple gimple_build_call_from_tree (tree);
 gimple gimplify_assign (tree, tree, gimple_seq *);
 gimple gimple_build_cond (enum tree_code, tree, tree, tree, tree);
@@ -861,6 +868,7 @@ gimple_seq gimple_seq_alloc (void);
 void gimple_seq_free (gimple_seq);
 void gimple_seq_add_seq (gimple_seq *, gimple_seq);
 gimple_seq gimple_seq_copy (gimple_seq);
+bool gimple_call_same_target_p (const_gimple, const_gimple);
 int gimple_call_flags (const_gimple);
 int gimple_call_return_flags (const_gimple);
 int gimple_call_arg_flags (const_gimple, unsigned);
@@ -2012,6 +2020,27 @@ gimple_call_fn (const_gimple gs)
 }
 
 
+/* Return true if call GS calls an internal-only function, as enumerated
+   by internal_fn.  */
+
+static inline bool
+gimple_call_internal_p (const_gimple gs)
+{
+  GIMPLE_CHECK (gs, GIMPLE_CALL);
+  return (gs->gsbase.subcode & GF_CALL_INTERNAL) != 0;
+}
+
+
+/* Return the target of internal call GS.  */
+
+static inline enum internal_fn
+gimple_call_internal_fn (const_gimple gs)
+{
+  gcc_assert (gimple_call_internal_p (gs));
+  return (enum internal_fn) (gs->gsbase.subcode >> GF_CALL_INTERNAL_FN_SHIFT);
+}
+
+
 /* Return a pointer to the tree node representing the function called by call
    statement GS.  */
 
@@ -2029,6 +2058,7 @@ static inline void
 gimple_call_set_fn (gimple gs, tree fn)
 {
   GIMPLE_CHECK (gs, GIMPLE_CALL);
+  gcc_assert (!gimple_call_internal_p (gs));
   gimple_set_op (gs, 1, fn);
 }
 
@@ -2039,7 +2069,20 @@ static inline void
 gimple_call_set_fndecl (gimple gs, tree decl)
 {
   GIMPLE_CHECK (gs, GIMPLE_CALL);
+  gcc_assert (!gimple_call_internal_p (gs));
   gimple_set_op (gs, 1, build_fold_addr_expr_loc (gimple_location (gs), decl));
+}
+
+
+/* Set internal function FN to be the function called by call statement GS.  */
+
+static inline void
+gimple_call_set_internal_fn (gimple gs, enum internal_fn fn)
+{
+  GIMPLE_CHECK (gs, GIMPLE_CALL);
+  gcc_assert (gimple_call_internal_p (gs));
+  gs->gsbase.subcode &= ~GF_CALL_INTERNAL_FN;
+  gs->gsbase.subcode |= (int) fn << GF_CALL_INTERNAL_FN_SHIFT;
 }
 
 
@@ -2051,7 +2094,7 @@ static inline tree
 gimple_call_fndecl (const_gimple gs)
 {
   tree addr = gimple_call_fn (gs);
-  if (TREE_CODE (addr) == ADDR_EXPR)
+  if (addr && TREE_CODE (addr) == ADDR_EXPR)
     {
       tree fndecl = TREE_OPERAND (addr, 0);
       if (TREE_CODE (fndecl) == MEM_REF)
@@ -2073,8 +2116,13 @@ gimple_call_fndecl (const_gimple gs)
 static inline tree
 gimple_call_return_type (const_gimple gs)
 {
-  tree fn = gimple_call_fn (gs);
-  tree type = TREE_TYPE (fn);
+  tree fn, type;
+
+  fn = gimple_call_fn (gs);
+  if (fn == NULL_TREE)
+    return TREE_TYPE (gimple_call_lhs (gs));
+
+  type = TREE_TYPE (fn);
 
   /* See through the pointer.  */
   type = TREE_TYPE (type);

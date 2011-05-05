@@ -1242,6 +1242,9 @@ gimple_ic_transform (gimple stmt)
   if (TREE_CODE (callee) == FUNCTION_DECL)
     return false;
 
+  if (gimple_call_internal_p (stmt))
+    return false;
+
   histogram = gimple_histogram_value_of_type (cfun, stmt, HIST_TYPE_INDIR_CALL);
   if (!histogram)
     return false;
@@ -1630,6 +1633,7 @@ gimple_indirect_call_to_profile (gimple stmt, histogram_values *values)
   tree callee;
 
   if (gimple_code (stmt) != GIMPLE_CALL
+      || gimple_call_internal_p (stmt)
       || gimple_call_fndecl (stmt) != NULL_TREE)
     return;
 

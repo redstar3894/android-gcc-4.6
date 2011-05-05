@@ -1,3 +1,335 @@
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.dg/vect/vect-strided-u16-i3.c: New test.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* lib/target-supports.exp (check_effective_target_vect_strided):
+	Replace with...
+	(check_effective_target_vect_strided2)
+	(check_effective_target_vect_strided3)
+	(check_effective_target_vect_strided4)
+	(check_effective_target_vect_strided8): ...these new functions.
+
+	* gcc.dg/vect/O3-pr39675-2.c: Update accordingly.
+	* gcc.dg/vect/costmodel/ppc/costmodel-slp-12.c: Likewise.
+	* gcc.dg/vect/fast-math-slp-27.c: Likewise.
+	* gcc.dg/vect/if-cvt-stores-vect-ifcvt-18.c: Likewise.
+	* gcc.dg/vect/pr37539.c: Likewise.
+	* gcc.dg/vect/slp-11a.c: Likewise.
+	* gcc.dg/vect/slp-11b.c: Likewise.
+	* gcc.dg/vect/slp-11c.c: Likewise.
+	* gcc.dg/vect/slp-12a.c: Likewise.
+	* gcc.dg/vect/slp-12b.c: Likewise.
+	* gcc.dg/vect/slp-18.c: Likewise.
+	* gcc.dg/vect/slp-19a.c: Likewise.
+	* gcc.dg/vect/slp-19b.c: Likewise.
+	* gcc.dg/vect/slp-21.c: Likewise.
+	* gcc.dg/vect/slp-23.c: Likewise.
+	* gcc.dg/vect/vect-cselim-1.c: Likewise.
+
+	* gcc.dg/vect/fast-math-vect-complex-3.c: Use vect_stridedN
+	instead of vect_interleave && vect_extract_even_odd.
+	* gcc.dg/vect/no-scevccp-outer-10a.c: Likewise.
+	* gcc.dg/vect/no-scevccp-outer-10b.c: Likewise.
+	* gcc.dg/vect/no-scevccp-outer-20.c: Likewise.
+	* gcc.dg/vect/vect-1.c: Likewise.
+	* gcc.dg/vect/vect-10.c: Likewise.
+	* gcc.dg/vect/vect-98.c: Likewise.
+	* gcc.dg/vect/vect-107.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-mult.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u16-i2.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u16-i4.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u16-mult.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u32-mult.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u8-i2-gap.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u8-i8-gap2.c: Likewise.
+	* gcc.dg/vect/vect-strided-a-u8-i8-gap7.c: Likewise.
+	* gcc.dg/vect/vect-strided-float.c: Likewise.
+	* gcc.dg/vect/vect-strided-mult-char-ls.c: Likewise.
+	* gcc.dg/vect/vect-strided-mult.c: Likewise.
+	* gcc.dg/vect/vect-strided-same-dr.c: Likewise.
+	* gcc.dg/vect/vect-strided-u16-i2.c: Likewise.
+	* gcc.dg/vect/vect-strided-u16-i4.c: Likewise.
+	* gcc.dg/vect/vect-strided-u32-i4.c: Likewise.
+	* gcc.dg/vect/vect-strided-u32-i8.c: Likewise.
+	* gcc.dg/vect/vect-strided-u32-mult.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i2-gap.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i2.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i8-gap2.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i8-gap4.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i8-gap7.c: Likewise.
+	* gcc.dg/vect/vect-strided-u8-i8.c: Likewise.
+	* gcc.dg/vect/vect-vfa-03.c: Likewise.
+
+	* gcc.dg/vect/no-scevccp-outer-18.c: Add vect_stridedN to the
+	target condition.
+	* gcc.dg/vect/pr30843.c: Likewise.
+	* gcc.dg/vect/pr33866.c: Likewise.
+	* gcc.dg/vect/slp-reduc-6.c: Likewise.
+	* gcc.dg/vect/vect-strided-store-a-u8-i2.c: Likewise.
+	* gcc.dg/vect/vect-strided-store-u16-i4.c: Likewise.
+	* gcc.dg/vect/vect-strided-store-u32-i2.c: Likewise.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.dg/vect/slp-11.c: Split into...
+	* gcc.dg/vect/slp-11a.c, gcc.dg/vect/slp-11b.c,
+	gcc.dg/vect/slp-11c.c: ...these tests.
+	* gcc.dg/vect/slp-12a.c: Split 4-stride loop into...
+	* gcc.dg/vect/slp-12c.c: ...this new test.
+	* gcc.dg/vect/slp-19.c: Split into...
+	* gcc.dg/vect/slp-19a.c, gcc.dg/vect/slp-19b.c,
+	gcc.dg/vect/slp-19c.c: ...these new tests.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* lib/target-supports.exp
+	(check_effective_target_vect_extract_even_odd_wide): Delete.
+	(check_effective_target_vect_strided_wide): Likewise.
+	* gcc.dg/vect/O3-pr39675-2.c: Use the non-wide versions instead.
+	* gcc.dg/vect/fast-math-pr35982.c: Likewise.
+	* gcc.dg/vect/fast-math-vect-complex-3.c: Likewise.
+	* gcc.dg/vect/pr37539.c: Likewise.
+	* gcc.dg/vect/slp-11.c: Likewise.
+	* gcc.dg/vect/slp-12a.c: Likewise.
+	* gcc.dg/vect/slp-12b.c: Likewise.
+	* gcc.dg/vect/slp-19.c: Likewise.
+	* gcc.dg/vect/slp-23.c: Likewise.
+	* gcc.dg/vect/vect-1.c: Likewise.
+	* gcc.dg/vect/vect-98.c: Likewise.
+	* gcc.dg/vect/vect-107.c: Likewise.
+	* gcc.dg/vect/vect-strided-float.c: Likewise.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-04-21  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.dg/vect/vect.exp: Run the main tests twice, one with -flto
+	and once without.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainlie:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* config/arm/neon.md (vec_load_lanes<mode><mode>): New expanders,
+	(vec_store_lanes<mode><mode>): Likewise.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* doc/md.texi (vec_load_lanes, vec_store_lanes): Document.
+	* optabs.h (COI_vec_load_lanes, COI_vec_store_lanes): New
+	convert_optab_index values.
+	(vec_load_lanes_optab, vec_store_lanes_optab): New convert optabs.
+	* genopinit.c (optabs): Initialize the new optabs.
+	* internal-fn.def (LOAD_LANES, STORE_LANES): New internal functions.
+	* internal-fn.c (get_multi_vector_move, expand_LOAD_LANES)
+	(expand_STORE_LANES): New functions.
+	* tree.h (build_array_type_nelts): Declare.
+	* tree.c (build_array_type_nelts): New function.
+	* tree-vectorizer.h (vect_model_store_cost): Add a bool argument.
+	(vect_model_load_cost): Likewise.
+	(vect_store_lanes_supported, vect_load_lanes_supported)
+	(vect_record_strided_load_vectors): Declare.
+	* tree-vect-data-refs.c (vect_lanes_optab_supported_p)
+	(vect_store_lanes_supported, vect_load_lanes_supported): New functions.
+	(vect_transform_strided_load): Split out statement recording into...
+	(vect_record_strided_load_vectors): ...this new function.
+	* tree-vect-stmts.c (create_vector_array, read_vector_array)
+	(write_vector_array, create_array_ref): New functions.
+	(vect_model_store_cost): Add store_lanes_p argument.
+	(vect_model_load_cost): Add load_lanes_p argument.
+	(vectorizable_store): Try to use store-lanes functions for
+	interleaved stores.
+	(vectorizable_load): Likewise load-lanes and loads.
+	* tree-vect-slp.c (vect_get_and_check_slp_defs): Update call
+	to vect_model_store_cost.
+	(vect_build_slp_tree): Likewise vect_model_load_cost.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-20  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* tree-vect-stmts.c (vectorizable_store): Only chain one related
+	statement per copy.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* tree-inline.c (estimate_num_insns): Likewise.
+
+	Backport from mainline:
+
+	2011-04-20  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* Makefile.in (INTERNAL_FN_DEF, INTERNAL_FN_H): Define.
+	(GIMPLE_H): Include $(INTERNAL_FN_H).
+	(OBJS-common): Add internal-fn.o.
+	(internal-fn.o): New rule.
+	* internal-fn.def: New file.
+	* internal-fn.h: Likewise.
+	* internal-fn.c: Likewise.
+	* gimple.h: Include internal-fn.h.
+	(GF_CALL_INTERNAL): New gf_mask.
+	(gimple_statement_call): Put fntype into a union with a new
+	internal_fn field.
+	(gimple_build_call_internal): Declare.
+	(gimple_build_call_internal_vec): Likewise.
+	(gimple_call_same_target_p): Likewise.
+	(gimple_call_internal_p): New function.
+	(gimple_call_internal_fn): Likewise.
+	(gimple_call_set_fn): Assert that the function is not internal.
+	(gimple_call_set_fndecl): Likewise.
+	(gimple_call_set_internal_fn): New function.
+	(gimple_call_addr_fndecl): Handle null functions.
+	(gimple_call_return_type): Likewise.
+	[---- Plus backport adjustments:
+	(GF_CALL_INTERNAL_FN_SHIFT): New macro.
+	(GF_CALL_INTERNAL_FN): New gf_mask.
+	----]
+	* gimple.c (gimple_build_call_internal_1): New function.
+	(gimple_build_call_internal): Likewise.
+	(gimple_build_call_internal_vec): Likewise.
+	(gimple_call_same_target_p): Likewise.
+	(gimple_call_flags): Handle calls to internal functions.
+	(gimple_call_fnspec): New function.
+	(gimple_call_arg_flags, gimple_call_return_flags): Use it.
+	(gimple_has_side_effects): Handle null functions.
+	(gimple_rhs_has_side_effects): Likewise.
+	(gimple_call_copy_skip_args): Handle calls to internal functions.
+	* cfgexpand.c (expand_call_stmt): Likewise.
+	* expr.c (expand_expr_real_1): Assert that the call isn't internal.
+	* gimple-low.c (gimple_check_call_args): Handle calls to internal
+	functions.
+	* gimple-pretty-print.c (dump_gimple_call): Likewise.
+	* ipa-prop.c (ipa_analyze_call_uses): Handle null functions.
+	* tree-cfg.c (verify_gimple_call): Handle calls to internal functions.
+	(do_warn_unused_result): Likewise.
+	[---- Plus backport adjustments:
+	(verify_stmt): Likewise.
+	----]
+	* tree-eh.c (same_handler_p): Use gimple_call_same_target_p.
+	* tree-ssa-ccp.c (ccp_fold_stmt): Handle calls to internal functions.
+	[---- Plus backport adjustments:
+	(fold_gimple_call): Likewise.
+	----]
+	* tree-ssa-dom.c (hashable_expr): Use the gimple statement to record
+	the target of a call.
+	(initialize_hash_element): Update accordingly.
+	(hashable_expr_equal_p): Use gimple_call_same_target_p.
+	(iterative_hash_hashable_expr): Handle calls to internal functions.
+	(print_expr_hash_elt): Likewise.
+	* tree-ssa-pre.c (can_value_number_call): Likewise.
+	(eliminate): Handle null functions.
+	* tree-ssa-sccvn.c (visit_use): Handle calls to internal functions.
+	* tree-ssa-structalias.c (find_func_aliases): Likewise.
+	* value-prof.c (gimple_ic_transform): Likewise.
+	(gimple_indirect_call_to_profile): Likewise.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-14  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* tree-vectorizer.h (vect_strided_store_supported): Add a
+	HOST_WIDE_INT argument.
+	(vect_strided_load_supported): Likewise.
+	(vect_permute_store_chain): Return void.
+	(vect_transform_strided_load): Likewise.
+	(vect_permute_load_chain): Delete.
+	* tree-vect-data-refs.c (vect_strided_store_supported): Take a
+	count argument.  Check that the count is a power of two.
+	(vect_strided_load_supported): Likewise.
+	(vect_permute_store_chain): Return void.  Update after above changes.
+	Assert that the access is supported.
+	(vect_permute_load_chain): Likewise.
+	(vect_transform_strided_load): Return void.
+	* tree-vect-stmts.c (vectorizable_store): Update calls after
+	above interface changes.
+	(vectorizable_load): Likewise.
+	(vect_analyze_stmt): Don't check for strided powers of two here.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-14  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* tree-vectorizer.h (vect_create_data_ref_ptr): Add an extra
+	type parameter.
+	* tree-vect-data-refs.c (vect_create_data_ref_ptr): Add an aggr_type
+	parameter.  Generalise code to handle arrays as well as vectors.
+	(vect_setup_realignment): Update accordingly.
+	* tree-vect-stmts.c (vectorizable_store): Likewise.
+	(vectorizable_load): Likewise.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-14  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* tree-vect-stmts.c (vectorizable_load): Allocate and free dr_chain
+	within the per-copy loop.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-14  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* tree-vect-stmts.c (vectorizable_load): Print the number of copies
+	in the dump file.
+
+2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-03-25  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* config/arm/arm.h (CANNOT_CHANGE_MODE_CLASS): Restrict FPA_REGS
+	case to VFPv1.
+
 2011-05-03  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/testsuite/

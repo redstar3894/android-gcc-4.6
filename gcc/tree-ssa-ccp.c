@@ -1279,7 +1279,10 @@ ccp_fold (gimple stmt)
 
     case GIMPLE_CALL:
       {
-	tree fn = valueize_op (gimple_call_fn (stmt));
+	tree fn = gimple_call_fn (stmt);
+	if (!fn)
+	  return NULL_TREE;
+	fn = valueize_op (fn);
 	if (TREE_CODE (fn) == ADDR_EXPR
 	    && TREE_CODE (TREE_OPERAND (fn, 0)) == FUNCTION_DECL
 	    && DECL_BUILT_IN (TREE_OPERAND (fn, 0)))
@@ -2309,6 +2312,11 @@ ccp_fold_stmt (gimple_stmt_iterator *gsi)
 	    gcc_assert (res);
 	    return true;
 	  }
+
+	/* Internal calls provide no argument types, so the extra laxity
+	   for normal calls does not apply.  */
+	if (gimple_call_internal_p (stmt))
+	  return false;
 
 	/* Propagate into the call arguments.  Compared to replace_uses_in
 	   this can use the argument slot types for type verification
