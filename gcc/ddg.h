@@ -167,7 +167,7 @@ struct ddg_all_sccs
 };
 
 
-ddg_ptr create_ddg (basic_block, sbitmap);
+ddg_ptr create_ddg (basic_block, int closing_branch_deps);
 void free_ddg (ddg_ptr);
 
 void print_ddg (FILE *, ddg_ptr);
