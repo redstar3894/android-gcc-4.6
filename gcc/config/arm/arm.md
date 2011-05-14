@@ -799,7 +799,7 @@
   ""
 )
 
-(define_insn "*addsi3_compare0"
+(define_insn "addsi3_compare0"
   [(set (reg:CC_NOOV CC_REGNUM)
 	(compare:CC_NOOV
 	 (plus:SI (match_operand:SI 1 "s_register_operand" "r, r")

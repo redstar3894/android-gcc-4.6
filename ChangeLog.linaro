@@ -1,3 +1,56 @@
+2011-05-13  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
+	* loop-doloop.c (doloop_condition_get): Support new form of
+	doloop pattern and use prev_nondebug_insn instead of PREV_INSN.
+	* config/arm/thumb2.md (*thumb2_addsi3_compare0): Remove "*".
+	(doloop_end): New.
+	* config/arm/arm.md (*addsi3_compare0): Remove "*".
+	* params.def (sms-min-sc): New param flag.
+	* doc/invoke.texi (sms-min-sc): Document it.
+	* ddg.c (create_ddg_dep_from_intra_loop_link): If a true dep edge
+	enters the branch create an anti edge in the opposite direction
+	to prevent the creation of reg-moves.
+	* modulo-sched.c: Adjust comment to reflect the fact we are
+	scheduling closing branch.
+	(PS_STAGE_COUNT): Rename to CALC_STAGE_COUNT and redefine.
+	(stage_count): New field in struct partial_schedule.
+	(calculate_stage_count): New function.
+	(normalize_sched_times): Rename to reset_sched_times and handle
+	incrementing the sched time of the nodes by a constant value
+	passed as parameter.
+	(duplicate_insns_of_cycles): Skip closing branch.
+	(sms_schedule_by_order): Schedule closing branch.
+	(ps_insn_find_column): Handle closing branch.
+	(sms_schedule): Call reset_sched_times and adjust the code to
+	support scheduling of the closing branch. Use sms-min-sc.
+	Support new form of doloop pattern.
+	(ps_insert_empty_row): Update calls to normalize_sched_times
+	and rotate_partial_schedule functions.
+
+2011-05-12  Michael Hope  <michael.hope@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-05-05  Michael Hope  <michael.hope@linaro.org>
+
+	PR pch/45979
+	* config/host-linux.c (TRY_EMPTY_VM_SPACE): Define for
+	__ARM_EABI__ hosts.
+
+2011-05-06  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge from FSF GCC 4.6 (svn branches/gcc-4_6-branch 173480).
+
+2011-05-06  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	From Sergey Grechanik  <mouseentity@ispras.ru>, approved for mainline
+
+	* config/arm/arm.c (coproc_secondary_reload_class): Return NO_REGS
+	for constant vectors.
+
 2011-05-05  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/testsuite/
