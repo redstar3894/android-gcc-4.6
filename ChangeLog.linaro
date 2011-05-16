@@ -1,3 +1,10 @@
+2011-05-16  Andrew Stubbs  <ams@codesourcery.com>
+
+	GCC Linaro 4.6-2011.05-0 released.
+
+	gcc/
+	* LINARO-VERSION: Update.
+
 2011-05-13  Revital Eres  <revital.eres@linaro.org>
 
 	gcc/
