@@ -1216,7 +1216,6 @@ sms_schedule (void)
 	      fprintf (dump_file, HOST_WIDEST_INT_PRINT_DEC, trip_count);
 	      fprintf (dump_file, ")\n");
 	    }
-	  continue;
 	}
       else
 	{

@@ -13,6 +13,12 @@
 2011-05-13  Revital Eres  <revital.eres@linaro.org>
 
 	gcc/
+	* ddg.c (free_ddg_all_sccs): Free sccs field in struct ddg_all_sccs.
+	* modulo-sched.c (sms_schedule): Avoid unfreed memory when SMS fails.
+
+2011-05-13  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
 	* loop-doloop.c (doloop_condition_get): Support new form of
 	doloop pattern and use prev_nondebug_insn instead of PREV_INSN.
 	* config/arm/thumb2.md (*thumb2_addsi3_compare0): Remove "*".
