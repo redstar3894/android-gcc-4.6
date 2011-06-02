@@ -286,6 +286,7 @@ gimple_build_call_internal_1 (enum internal_fn fn, unsigned nargs)
   gimple s = gimple_build_with_ops (GIMPLE_CALL, ERROR_MARK, nargs + 3);
   s->gsbase.subcode |= GF_CALL_INTERNAL;
   gimple_call_set_internal_fn (s, fn);
+  gimple_call_reset_alias_info (s);
   return s;
 }
 
