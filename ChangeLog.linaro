@@ -1,3 +1,7 @@
+2011-05-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge from FSF GCC 4.6 (svn branches/gcc-4_6-branch 174261).
+
 2011-06-02  Chung-Lin Tang  <cltang@codesourcery.com>
 
 	Backport from mainline:
