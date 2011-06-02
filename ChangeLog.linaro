@@ -1,3 +1,25 @@
+2011-06-02  Chung-Lin Tang  <cltang@codesourcery.com>
+
+	Backport from mainline:
+
+	2011-03-21  Chung-Lin Tang  <cltang@codesourcery.com>
+
+	gcc/
+	* simplify-rtx.c (simplify_binary_operation_1): Handle
+	(xor (and A B) C) case when B and C are both constants.
+
+	gcc/testsuite/
+	* gcc.target/arm/xor-and.c: New.
+
+	2011-03-18  Chung-Lin Tang  <cltang@codesourcery.com>
+
+	gcc/
+	* combine.c (try_combine): Do simplification only call of
+	subst() on i2 even when i1 is present. Update comments.
+
+	gcc/testsuite/
+	* gcc.target/arm/unsigned-extend-1.c: New.
+
 2011-05-16  Andrew Stubbs  <ams@codesourcery.com>
 
 	gcc/
