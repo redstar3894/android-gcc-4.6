@@ -709,24 +709,21 @@
 ;;  (plus (reg rN) (reg sp)) into (reg rN).  In this case reload will
 ;; put the duplicated register first, and not try the commutative version.
 (define_insn_and_split "*arm_addsi3"
-  [(set (match_operand:SI          0 "s_register_operand" "=r, k,r,r, k, r, k,r, k, r")
-	(plus:SI (match_operand:SI 1 "s_register_operand" "%rk,k,r,rk,k, rk,k,rk,k, rk")
-		 (match_operand:SI 2 "reg_or_int_operand" "rI,rI,k,Pj,Pj,L, L,PJ,PJ,?n")))]
+  [(set (match_operand:SI          0 "s_register_operand" "=r, k,r,r, k,r")
+	(plus:SI (match_operand:SI 1 "s_register_operand" "%rk,k,r,rk,k,rk")
+		 (match_operand:SI 2 "reg_or_int_operand" "rI,rI,k,L, L,?n")))]
   "TARGET_32BIT"
   "@
    add%?\\t%0, %1, %2
    add%?\\t%0, %1, %2
    add%?\\t%0, %2, %1
-   addw%?\\t%0, %1, %2
-   addw%?\\t%0, %1, %2
    sub%?\\t%0, %1, #%n2
    sub%?\\t%0, %1, #%n2
-   subw%?\\t%0, %1, #%n2
-   subw%?\\t%0, %1, #%n2
    #"
   "TARGET_32BIT
    && GET_CODE (operands[2]) == CONST_INT
-   && !const_ok_for_op (INTVAL (operands[2]), PLUS)
+   && !(const_ok_for_arm (INTVAL (operands[2]))
+        || const_ok_for_arm (-INTVAL (operands[2])))
    && (reload_completed || !arm_eliminable_register (operands[1]))"
   [(clobber (const_int 0))]
   "
@@ -735,9 +732,8 @@
 		      operands[1], 0);
   DONE;
   "
-  [(set_attr "length" "4,4,4,4,4,4,4,4,4,16")
-   (set_attr "predicable" "yes")
-   (set_attr "arch" "*,*,*,t2,t2,*,*,t2,t2,*")]
+  [(set_attr "length" "4,4,4,4,4,16")
+   (set_attr "predicable" "yes")]
 )
 
 (define_insn_and_split "*thumb1_addsi3"
@@ -1821,36 +1817,6 @@
    (set_attr "predicable" "yes")]
 )
 
-;; Note: there is no maddhisi4ibt because this one is canonical form
-(define_insn "*maddhisi4tb"
-  [(set (match_operand:SI 0 "s_register_operand" "=r")
-	(plus:SI (mult:SI (ashiftrt:SI
-			   (match_operand:SI 1 "s_register_operand" "r")
-			   (const_int 16))
-			  (sign_extend:SI
-			   (match_operand:HI 2 "s_register_operand" "r")))
-		 (match_operand:SI 3 "s_register_operand" "r")))]
-  "TARGET_DSP_MULTIPLY"
-  "smlatb%?\\t%0, %1, %2, %3"
-  [(set_attr "insn" "smlaxy")
-   (set_attr "predicable" "yes")]
-)
-
-(define_insn "*maddhisi4tt"
-  [(set (match_operand:SI 0 "s_register_operand" "=r")
-	(plus:SI (mult:SI (ashiftrt:SI
-			   (match_operand:SI 1 "s_register_operand" "r")
-			   (const_int 16))
-			  (ashiftrt:SI
-			   (match_operand:SI 2 "s_register_operand" "r")
-			   (const_int 16)))
-		 (match_operand:SI 3 "s_register_operand" "r")))]
-  "TARGET_DSP_MULTIPLY"
-  "smlatt%?\\t%0, %1, %2, %3"
-  [(set_attr "insn" "smlaxy")
-   (set_attr "predicable" "yes")]
-)
-
 (define_insn "*maddhidi4"
   [(set (match_operand:DI 0 "s_register_operand" "=r")
 	(plus:DI
@@ -1861,39 +1827,6 @@
 	  (match_operand:DI 3 "s_register_operand" "0")))]
   "TARGET_DSP_MULTIPLY"
   "smlalbb%?\\t%Q0, %R0, %1, %2"
-  [(set_attr "insn" "smlalxy")
-   (set_attr "predicable" "yes")])
-
-;; Note: there is no maddhidi4ibt because this one is canonical form
-(define_insn "*maddhidi4tb"
-  [(set (match_operand:DI 0 "s_register_operand" "=r")
-	(plus:DI
-	  (mult:DI (sign_extend:DI
-		    (ashiftrt:SI
-		     (match_operand:SI 1 "s_register_operand" "r")
-		     (const_int 16)))
-		   (sign_extend:DI
-		    (match_operand:HI 2 "s_register_operand" "r")))
-	  (match_operand:DI 3 "s_register_operand" "0")))]
-  "TARGET_DSP_MULTIPLY"
-  "smlaltb%?\\t%Q0, %R0, %1, %2"
-  [(set_attr "insn" "smlalxy")
-   (set_attr "predicable" "yes")])
-
-(define_insn "*maddhidi4tt"
-  [(set (match_operand:DI 0 "s_register_operand" "=r")
-	(plus:DI
-	  (mult:DI (sign_extend:DI
-		    (ashiftrt:SI
-		     (match_operand:SI 1 "s_register_operand" "r")
-		     (const_int 16)))
-		   (sign_extend:DI
-		    (ashiftrt:SI
-		     (match_operand:SI 2 "s_register_operand" "r")
-		     (const_int 16))))
-	  (match_operand:DI 3 "s_register_operand" "0")))]
-  "TARGET_DSP_MULTIPLY"
-  "smlaltt%?\\t%Q0, %R0, %1, %2"
   [(set_attr "insn" "smlalxy")
    (set_attr "predicable" "yes")])
 
