@@ -1,3 +1,26 @@
+2011-06-10  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	Backport from mainline:
+	gcc/
+        2011-06-02  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+	* config/arm/neon.md (orndi3_neon): Actually split it.
+
+
+2011-06-10  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+        Backport from mainline.
+	gcc/
+        2011-05-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* config/arm/neon.md ("orn<mode>3_neon"): Canonicalize not.
+	("orndi3_neon"): Likewise.
+	("bic<mode>3_neon"): Likewise.
+
+	gcc/testsuite
+	2011-05-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* gcc.target/arm/neon-vorn-vbic.c: New test.
+
 2011-06-07  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from FSF:
