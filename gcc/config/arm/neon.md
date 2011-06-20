@@ -5571,6 +5571,7 @@
  }
 )
 
+;; The case when using all quad registers.
 (define_insn "vec_pack_trunc_<mode>"
  [(set (match_operand:<V_narrow_pack> 0 "register_operand" "=&w")
        (vec_concat:<V_narrow_pack> 
