@@ -1,3 +1,24 @@
+2011-06-28  Michael Hope  <michael.hope@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	Chung-Lin Tang  <cltang@codesourcery.com>
+	Richard Earnshaw  <rearnsha@arm.com>
+
+	PR target/48250
+	* config/arm/arm.c (arm_legitimize_reload_address): Update cases
+	to use sign-magnitude offsets. Reject unsupported unaligned
+	cases. Add detailed description in comments.
+	* config/arm/arm.md (reload_outdf): Disable for ARM mode; change
+	condition from TARGET_32BIT to TARGET_ARM.
+
+	Chung-Lin Tang  <cltang@codesourcery.com>
+
+	* config/arm/arm.c (arm_legitimize_reload_address): For NEON
+	quad-word modes, reduce to 9-bit index range when above 1016
+	limit.
+
 2011-06-20  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	gcc/
