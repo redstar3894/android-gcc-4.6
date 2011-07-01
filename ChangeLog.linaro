@@ -1,3 +1,12 @@
+2011-06-30  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	Backport from mainline.
+	LP 744754
+        2011-04-17  Chung-Lin Tang  <cltang@codesourcery.com>
+
+	* config/arm/arm.c (neon_struct_mem_operand):
+	Support POST_INC/PRE_DEC memory operands.
+
 2011-06-28  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	Backport from mainline.
