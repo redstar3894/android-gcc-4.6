@@ -1,3 +1,13 @@
+2011-07-03  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from FSF:
+	2011-06-12  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-vect-data-refs.c (vect_peeling_hash_get_most_frequent):
+	Take number of iterations to peel into account for equally frequent
+	misalignment values.
+
 2011-07-01  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	Backport from mainline.
