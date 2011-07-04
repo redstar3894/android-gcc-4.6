@@ -1,3 +1,7 @@
+2011-07-01  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge from FSF GCC 4.6.1 (svn branches/gcc-4_6-branch 175677).
+
 2011-07-03  Ira Rosen  <ira.rosen@linaro.org>
 
 	Backport from FSF:
