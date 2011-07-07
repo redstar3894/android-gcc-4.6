@@ -9232,15 +9232,10 @@ fold_mult_zconjz (location_t loc, tree type, tree expr)
    0 <= N < M as is common.  In general, the precise value of P is unknown.
    M is chosen as large as possible such that constant N can be determined.
 
-   Returns M and sets *RESIDUE to N.
-
-   If ALLOW_FUNC_ALIGN is true, do take functions' DECL_ALIGN_UNIT into
-   account.  This is not always possible due to PR 35705.
- */
+   Returns M and sets *RESIDUE to N.  */
 
 static unsigned HOST_WIDE_INT
-get_pointer_modulus_and_residue (tree expr, unsigned HOST_WIDE_INT *residue,
-				 bool allow_func_align)
+get_pointer_modulus_and_residue (tree expr, unsigned HOST_WIDE_INT *residue)
 {
   enum tree_code code;
 
@@ -9270,9 +9265,8 @@ get_pointer_modulus_and_residue (tree expr, unsigned HOST_WIDE_INT *residue,
 	    }
 	}
 
-      if (DECL_P (expr)
-	  && (allow_func_align || TREE_CODE (expr) != FUNCTION_DECL))
-	return DECL_ALIGN_UNIT (expr);
+      if (DECL_P (expr))
+	return get_object_alignment (expr, ~0U) / BITS_PER_UNIT;
     }
   else if (code == POINTER_PLUS_EXPR)
     {
@@ -9282,8 +9276,7 @@ get_pointer_modulus_and_residue (tree expr, unsigned HOST_WIDE_INT *residue,
 
       op0 = TREE_OPERAND (expr, 0);
       STRIP_NOPS (op0);
-      modulus = get_pointer_modulus_and_residue (op0, residue,
-						 allow_func_align);
+      modulus = get_pointer_modulus_and_residue (op0, residue);
 
       op1 = TREE_OPERAND (expr, 1);
       STRIP_NOPS (op1);
@@ -11163,8 +11156,7 @@ fold_binary_loc (location_t loc,
 	  unsigned HOST_WIDE_INT modulus, residue;
 	  unsigned HOST_WIDE_INT low = TREE_INT_CST_LOW (arg1);
 
-	  modulus = get_pointer_modulus_and_residue (arg0, &residue,
-						     integer_onep (arg1));
+	  modulus = get_pointer_modulus_and_residue (arg0, &residue);
 
 	  /* This works because modulus is a power of 2.  If this weren't the
 	     case, we'd have to replace it by its greatest power-of-2

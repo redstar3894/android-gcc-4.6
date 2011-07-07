@@ -1,3 +1,53 @@
+2011-07-07  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* builtins.c (get_object_alignment): Fix comment.
+	* fold-const.c (get_pointer_modulus_and_residue): Remove
+	allow_func_align.  Use get_object_alignment.
+	(fold_binary_loc): Update caller.
+
+2011-07-07  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-06-29  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	PR tree-optimization/49545
+	* builtins.c (get_object_alignment_1): Update function comment.
+	Do not use DECL_ALIGN for functions, but test
+	TARGET_PTRMEMFUNC_VBIT_LOCATION instead.
+	* fold-const.c (get_pointer_modulus_and_residue): Don't check
+	for functions here.
+	* tree-ssa-ccp.c (get_value_from_alignment): Likewise.
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-06-29  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.dg/torture/pr49169.c: Restrict to ARM and MIPS targets.
+
+2011-07-07  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-07-27  Richard Guenther  <rguenther@suse.de>
+
+	PR tree-optimization/49169
+	* fold-const.c (get_pointer_modulus_and_residue): Don't rely on
+	the alignment of function decls.
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-07-27  Michael Hope  <michael.hope@linaro.org>
+		    Richard Sandiford  <richard.sandiford@linaro.org>
+
+	PR tree-optimization/49169
+	* gcc.dg/torture/pr49169.c: New test.
+
 2011-07-01  Andrew Stubbs  <ams@codesourcery.com>
 
 	Merge from FSF GCC 4.6.1 (svn branches/gcc-4_6-branch 175677).
