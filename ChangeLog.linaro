@@ -1,3 +1,17 @@
+2011-07-13  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	Backport from mainline:
+	gcc/
+	2011-07-07  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* reload1.c (choose_reload_regs): Use mode sizes to check whether
+	an old reload register completely defines the required value.
+
+	gcc/testsuite/
+	2011-07-07  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	* gcc.target/arm/neon-modes-3.c: New test.
+
 2011-07-11  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	gcc/
