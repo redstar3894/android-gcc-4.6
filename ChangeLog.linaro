@@ -1,5 +1,29 @@
 2011-07-15  Michael Hope  <michael.hope@linaro.org>
 
+	Backport from mainline r174540
+	LP: #807573
+
+	gcc/
+	2011-06-01  Richard Sandiford  <rdsandiford@googlemail.com>
+
+	PR rtl-optimization/48830
+	PR rtl-optimization/48808
+	PR rtl-optimization/48792
+	* reload.c (push_reload): Check contains_reg_of_mode.
+	* reload1.c (strip_paradoxical_subreg): New function.
+	(gen_reload_chain_without_interm_reg_p): Use it to handle
+	paradoxical subregs.
+	(emit_output_reload_insns, gen_reload): Likewise.
+
+	gcc/testsuite/
+	2011-06-01  Eric Botcazou  <ebotcazou@adacore.com>
+		    Hans-Peter Nilsson  <hp@axis.com>
+
+	PR rtl-optimization/48830
+	* gcc.target/sparc/ultrasp12.c: New test.
+
+2011-07-15  Michael Hope  <michael.hope@linaro.org>
+
 	gcc/
 	Backport from mainline:
 
