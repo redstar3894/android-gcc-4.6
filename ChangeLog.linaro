@@ -3,6 +3,28 @@
 	gcc/
 	Backport from mainline:
 
+	2011-06-29  Nathan Sidwell  <nathan@codesourcery.com>
+
+	* config/arm/unwind-arm.c (enum __cxa_type_match_result): New.
+	(cxa_type_match): Correct declaration.
+	(__gnu_unwind_pr_common): Reconstruct
+	additional indirection when __cxa_type_match returns
+	succeeded_with_ptr_to_base.
+
+	libstdc++-v3/
+	Backport from mainline:
+
+	2011-06-29  Nathan Sidwell  <nathan@codesourcery.com>
+
+	* libsupc++/eh_arm.c (__cxa_type_match): Construct address of
+	thrown object here.  Return succeded_with_ptr_to_base for all
+	pointer cases.
+
+2011-07-15  Michael Hope  <michael.hope@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
 	2011-03-22  Eric Botcazou  <ebotcazou@adacore.com>
 
 	* combine.c (simplify_set): Try harder to find the best CC mode when
