@@ -36,6 +36,14 @@
 
 	* optabs.c (init_optabs): Init optab codes for vashl, vashr, vlshr.
 
+	gcc/testsuite
+	2011-06-22  Dmitry Plotnikov  <dplotnikov@ispras.ru>
+	Dmitry Melnik  <dm@ispras.ru>
+
+	* gcc.target/arm/neon-vshr-imm-1.c: New testcase.
+	* gcc.target/arm/neon-vshl-imm-1.c: New testcase.
+	* gcc.target/arm/neon-vlshr-imm-1.c: New testcase.
+
 2011-07-11  Revital Eres  <revital.eres@linaro.org>
 
 	Backport from mainline -r175091
@@ -163,14 +171,6 @@
 
 	PR tree-optimization/49169
 	* gcc.dg/torture/pr49169.c: New test.
-=======
-	2011-06-22  Dmitry Plotnikov  <dplotnikov@ispras.ru>
-	Dmitry Melnik  <dm@ispras.ru>
-
-	* gcc.target/arm/neon-vshr-imm-1.c: New testcase.
-	* gcc.target/arm/neon-vshl-imm-1.c: New testcase.
-	* gcc.target/arm/neon-vlshr-imm-1.c: New testcase.
->>>>>>> MERGE-SOURCE
 
 2011-07-01  Andrew Stubbs  <ams@codesourcery.com>
 
