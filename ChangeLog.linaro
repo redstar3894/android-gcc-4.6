@@ -3,6 +3,16 @@
 	gcc/
 	Backport from mainline:
 
+	2011-03-22  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* combine.c (simplify_set): Try harder to find the best CC mode when
+	simplifying a nested COMPARE on the RHS.
+
+2011-07-15  Michael Hope  <michael.hope@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
 	2011-04-05  Eric Botcazou  <ebotcazou@adacore.com>
 
 	* ifcvt.c (cond_exec_process_insns): Disallow converting a block
