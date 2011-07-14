@@ -1,3 +1,20 @@
+2011-07-15  Michael Hope  <michael.hope@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+	2011-04-05  Eric Botcazou  <ebotcazou@adacore.com>
+
+	* ifcvt.c (cond_exec_process_insns): Disallow converting a block
+	that contains the prologue.
+
+	gcc/testsuite/
+	Backport from mainline:
+
+	2011-04-01  Bernd Schmidt  <bernds@codesourcery.com>
+
+	* gcc.c-torture/compile/20110401-1.c: New test.
+
 2011-07-13  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	Backport from mainline:
