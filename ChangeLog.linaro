@@ -1,3 +1,10 @@
+2011-07-18  Andrew Stubbs  <ams@codesourcery.com>
+
+	GCC Linaro 4.6-2011.07-0 released.
+
+	gcc/
+	* LINARO-VERSION: Update.
+
 2011-07-15  Michael Hope  <michael.hope@linaro.org>
 
 	Backport from mainline r174540
