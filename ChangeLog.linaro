@@ -1,3 +1,12 @@
+2011-07-31  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
+	Backport from trunk -r176970:
+
+	* modulo-sched.c: Change comment.
+	(reset_sched_times): Fix print message.
+	(print_partial_schedule): Add print info.
+
 2011-07-21  Richard Sandiford  <rdsandiford@googlemail.com>
 
 	gcc/
