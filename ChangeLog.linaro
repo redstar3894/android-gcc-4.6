@@ -1,3 +1,14 @@
+2011-08-11  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	gcc/
+	Backport from mainline:
+
+        2011-07-28  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	* config/arm/vfp.md ("*movdf_vfp"): Handle the VFP constraints
+	before the core constraints. Adjust attributes.
+	(*thumb2_movdf_vfp"): Likewise.
+
 2011-08-09  Revital Eres  <revital.eres@linaro.org>
 
 	gcc/
@@ -33,6 +44,7 @@
 	* modulo-sched.c: Change comment.
 	(reset_sched_times): Fix print message.
 	(print_partial_schedule): Add print info.
+
 
 2011-07-21  Richard Sandiford  <rdsandiford@googlemail.com>
 
