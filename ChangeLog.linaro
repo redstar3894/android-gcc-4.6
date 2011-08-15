@@ -1,5 +1,9 @@
 2011-08-15  Michael Hope  <michael.hope@linaro.org>
 
+	Merge from FSF GCC 4.6.1 (svn branches/gcc-4_6-branch 177703).
+
+2011-08-15  Michael Hope  <michael.hope@linaro.org>
+
 	Backport from mainline r177357
 
 	gcc/testsuite/

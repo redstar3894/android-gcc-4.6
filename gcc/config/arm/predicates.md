@@ -709,4 +709,4 @@
        (match_test "TARGET_32BIT && neon_vector_mem_operand (op, 2)")))
 
 (define_special_predicate "add_operator"
-  (match_code "plus"))
+			 (match_code "plus"))
