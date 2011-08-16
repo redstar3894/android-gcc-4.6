@@ -1,3 +1,10 @@
+2011-08-15  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* config/rs6000/rs6000.c (paired_expand_vector_init): Don't create
+	CONST_VECTORs with symbolic elements.
+	(rs6000_expand_vector_init): Likewise.
+
 2011-08-15  Michael Hope  <michael.hope@linaro.org>
 
 	Merge from FSF GCC 4.6.1 (svn branches/gcc-4_6-branch 177703).
