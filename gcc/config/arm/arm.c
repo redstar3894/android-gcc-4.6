@@ -7464,6 +7464,9 @@ arm_rtx_costs_1 (rtx x, enum rtx_code outer, int* total, bool speed)
 	*total = COSTS_N_INSNS (4);
       return true;
 
+    case SET:
+      return false;
+
     default:
       *total = COSTS_N_INSNS (4);
       return false;
@@ -7810,6 +7813,9 @@ arm_size_rtx_costs (rtx x, enum rtx_code code, enum rtx_code outer_code,
 	 cost of these slightly.  */
       *total = COSTS_N_INSNS (1) + 1;
       return true;
+
+    case SET:
+      return false;
 
     default:
       if (mode != VOIDmode)
