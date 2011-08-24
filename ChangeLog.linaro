@@ -1,11 +1,13 @@
 2011-08-24  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
+	LP:823548
 	gcc/
 	* config/arm/arm.c (arm_init_neon_builtins): Use 
 	n_operands instead of n_generator_args.
 
 2011-08-24  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
+	LP:823548
 	Backport from mainline
 	2011-04-18  Jie Zhang  <jie@codesourcery.com>
 	Richard Earnshaw  <rearnsha@arm.com>
