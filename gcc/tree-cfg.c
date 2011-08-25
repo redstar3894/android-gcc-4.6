@@ -3574,7 +3574,7 @@ do_pointer_plus_expr_check:
     case WIDEN_MULT_EXPR:
       if (TREE_CODE (lhs_type) != INTEGER_TYPE)
 	return true;
-      return ((2 * TYPE_PRECISION (rhs1_type) != TYPE_PRECISION (lhs_type))
+      return ((2 * TYPE_PRECISION (rhs1_type) > TYPE_PRECISION (lhs_type))
 	      || (TYPE_PRECISION (rhs1_type) != TYPE_PRECISION (rhs2_type)));
 
     case WIDEN_SUM_EXPR:
@@ -3667,7 +3667,7 @@ verify_gimple_assign_ternary (gimple stmt)
 	   && !FIXED_POINT_TYPE_P (rhs1_type))
 	  || !useless_type_conversion_p (rhs1_type, rhs2_type)
 	  || !useless_type_conversion_p (lhs_type, rhs3_type)
-	  || 2 * TYPE_PRECISION (rhs1_type) != TYPE_PRECISION (lhs_type)
+	  || 2 * TYPE_PRECISION (rhs1_type) > TYPE_PRECISION (lhs_type)
 	  || TYPE_PRECISION (rhs1_type) != TYPE_PRECISION (rhs2_type))
 	{
 	  error ("type mismatch in widening multiply-accumulate expression");
