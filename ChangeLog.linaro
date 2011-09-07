@@ -1,13 +1,88 @@
+2011-09-07  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from mainline:
+
+	2011-08-04  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-vectorizer.h (struct _stmt_vec_info): Add new field for
+	pattern def statement, and its access macro.
+	(NUM_PATTERNS): Set to 5.
+	* tree-vect-loop.c (vect_determine_vectorization_factor): Handle
+	pattern def statement.
+	(vect_transform_loop): Likewise.
+	* tree-vect-patterns.c (vect_vect_recog_func_ptrs): Add new
+	function vect_recog_over_widening_pattern ().
+	(vect_operation_fits_smaller_type): New function.
+	(vect_recog_over_widening_pattern, vect_mark_pattern_stmts):
+	Likewise.
+	(vect_pattern_recog_1): Move the code that marks pattern
+	statements to vect_mark_pattern_stmts (), and call it.  Update
+	documentation.
+	* tree-vect-stmts.c (vect_supportable_shift): New function.
+	(vect_analyze_stmt): Handle pattern def statement.
+	(new_stmt_vec_info): Initialize pattern def statement.
+
+	gcc/testsuite/
+	* gcc.dg/vect/vect-over-widen-1.c: New test.
+	* gcc.dg/vect/vect-over-widen-2.c: New test.
+	* gcc.dg/vect/vect-over-widen-3.c: New test.
+	* gcc.dg/vect/vect-over-widen-4.c: New test.
+
+
+	2011-08-09  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	PR tree-optimization/50014
+	* tree-vect-loop.c (vectorizable_reduction): Get def type before
+	calling vect_get_vec_def_for_stmt_copy ().
+
+	gcc/testsuite/
+	PR tree-optimization/50014
+	* gcc.dg/vect/pr50014.c: New test.
+
+
+	2011-08-11  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	PR tree-optimization/50039
+	* tree-vect-patterns.c (vect_operation_fits_smaller_type): Check
+	that DEF_STMT has a stmt_vec_info.
+
+	gcc/testsuite/
+	PR tree-optimization/50039
+	* gcc.dg/vect/vect.exp: Run no-tree-fre-* tests with -fno-tree-fre.
+	* gcc.dg/vect/no-tree-fre-pr50039.c: New test.
+
+
+	2011-09-04  Jakub Jelinek  <jakub@redhat.com>
+		    Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	PR tree-optimization/50208
+	* tree-vect-patterns.c (vect_handle_widen_mult_by_const): Add an
+	argument.  Check that def_stmt is inside the loop.
+	(vect_recog_widen_mult_pattern): Update calls to
+	vect_handle_widen_mult_by_cons.
+	(vect_operation_fits_smaller_type): Check that def_stmt is
+	inside the loop.
+
+	gcc/testsuite/
+	PR tree-optimization/50208
+	* gcc.dg/vect/no-fre-pre-pr50208.c: New test.
+	* gcc.dg/vect/vect.exp: Run no-fre-pre-*.c tests with
+	-fno-tree-fre -fno-tree-pre.
+
 2011-09-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
-       Backport from mainline.
-       2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
+	Backport from mainline.
+	2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
 
-       * config/arm/cortex-a9.md ("cortex_a9_mult_long"): New.
-       ("cortex_a9_multiply_long"): New and use above.  Handle all
-        long multiply cases.
-       ("cortex_a9_multiply"): Handle smmul and smmulr.
-       ("cortex_a9_mac"): Handle smmla.
+	* config/arm/cortex-a9.md ("cortex_a9_mult_long"): New.
+	("cortex_a9_multiply_long"): New and use above.  Handle all
+	long multiply cases.
+	("cortex_a9_multiply"): Handle smmul and smmulr.
+	("cortex_a9_mac"): Handle smmla.
 
 2011-09-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
@@ -15,7 +90,7 @@
 
 	2011-08-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
-        PR target/48328
+	PR target/48328
 	* config/arm/arm.h (CASE_VECTOR_SHORTEN_MODE): Fix distance
 	for tbh instructions.
 
