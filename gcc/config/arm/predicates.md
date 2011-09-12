@@ -132,7 +132,8 @@
 (define_predicate "shift_amount_operand"
   (ior (and (match_test "TARGET_ARM")
 	    (match_operand 0 "s_register_operand"))
-       (match_operand 0 "const_int_operand")))
+       (and (match_operand 0 "const_int_operand")
+	    (match_test "INTVAL (op) > 0"))))
 
 (define_predicate "arm_add_operand"
   (ior (match_operand 0 "arm_rhs_operand")
