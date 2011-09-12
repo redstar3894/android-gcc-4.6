@@ -1,3 +1,60 @@
+2011-09-12  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF mainline:
+
+	2011-08-30  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (optimal_immediate_sequence_1): Make b1, b2,
+	b3 and b4 unsigned.
+
+	2011-08-30  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (arm_gen_constant): Set can_negate correctly
+	when code is SET.
+
+	2011-08-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (struct four_ints): New type.
+	(count_insns_for_constant): Delete function.
+	(find_best_start): Delete function.
+	(optimal_immediate_sequence): New function.
+	(optimal_immediate_sequence_1): New function.
+	(arm_gen_constant): Move constant splitting code to
+	optimal_immediate_sequence.
+	Rewrite constant negation/invertion code.
+
+	gcc/testsuite/
+	* gcc.target/arm/thumb2-replicated-constant1.c: New file.
+	* gcc.target/arm/thumb2-replicated-constant2.c: New file.
+	* gcc.target/arm/thumb2-replicated-constant3.c: New file.
+	* gcc.target/arm/thumb2-replicated-constant4.c: New file.
+
+	2011-08-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm-protos.h (const_ok_for_op): Add prototype.
+	* config/arm/arm.c (const_ok_for_op): Add support for addw/subw.
+	Remove prototype. Remove static function type.
+	* config/arm/arm.md (*arm_addsi3): Add addw/subw support.
+	Add arch attribute.
+	* config/arm/constraints.md (Pj, PJ): New constraints.
+
+	2011-04-20  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (arm_gen_constant): Move mowv support ....
+	(const_ok_for_op): ... to here.
+
+	2011-04-20  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config/arm/arm.c (arm_gen_constant): Remove redundant can_invert.
+
+
+
 2011-09-08  Andrew Stubbs  <ams@codesourcery.com>
 
 	Merge from FSF GCC 4.6.1 (svn branches/gcc-4_6-branch 178681).
