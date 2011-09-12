@@ -1,3 +1,46 @@
+2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	Backport from FSF mainline:
+        2011-04-06  Wei Guozhi  <carrot@google.com>
+
+        PR target/47855
+	gcc/
+        * config/arm/arm.md (arm_cmpsi_insn): Compute attr "length".
+        (arm_cond_branch): Likewise.
+        (arm_cond_branch_reversed): Likewise.
+        (arm_jump): Likewise.
+        (push_multi): Likewise.
+        * config/arm/constraints.md (Py): New constraint.
+
+	2011-04-08  Wei Guozhi  <carrot@google.com>
+
+	PR target/47855
+	* config/arm/arm-protos.h (arm_attr_length_push_multi): New prototype.
+	* config/arm/arm.c (arm_attr_length_push_multi): New function.
+	* config/arm/arm.md (*push_multi): Change the length computation to
+	call a C function.
+
+2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	Backport from FSF mainline:
+
+        2011-08-18  Jiangning Liu  <jiangning.liu@arm.com>
+
+	gcc/
+	* config/arm/arm.md (*ior_scc_scc): Enable for Thumb2 as well.
+	(*ior_scc_scc_cmp): Likewise
+	(*and_scc_scc): Likewise.
+	(*and_scc_scc_cmp): Likewise.
+	(*and_scc_scc_nodom): Likewise.
+	(*cmp_ite0, *cmp_ite1, *cmp_and, *cmp_ior): Handle Thumb2.
+
+	gcc/testsuite
+	* gcc.target/arm/thumb2-cond-cmp-1.c: New. Make sure conditional
+	compare can be generated.
+	* gcc.target/arm/thumb2-cond-cmp-2.c: Likewise.
+	* gcc.target/arm/thumb2-cond-cmp-3.c: Likewise.
+	* gcc.target/arm/thumb2-cond-cmp-4.c: Likewise.
+
 2011-09-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	gcc/testsuite/
