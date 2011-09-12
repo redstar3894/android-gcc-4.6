@@ -1,4 +1,4 @@
-2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+2011-09-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	Backport from FSF mainline:
         2011-04-06  Wei Guozhi  <carrot@google.com>
@@ -20,7 +20,7 @@
 	* config/arm/arm.md (*push_multi): Change the length computation to
 	call a C function.
 
-2011-08-26  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+2011-09-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	Backport from FSF mainline:
 
