@@ -1,3 +1,26 @@
+2011-09-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	gcc/testsuite/
+	* gcc.target/arm/pr50099.c: Fix testcase from previous commit.
+
+2011-09-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+	LP:838994
+	gcc/
+	Backport from mainline.
+
+        2011-09-06  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+
+        PR target/50099
+	* config/arm/iterators.md (qhs_zextenddi_cstr): New.
+	(qhs_zextenddi_op): New.
+	* config/arm/arm.md ("zero_extend<mode>di2"): Use them.
+	* config/arm/predicates.md ("arm_extendqisi_mem_op"):
+	Distinguish between ARM and Thumb2 states.
+
+	gcc/testsuite/
+	* gcc.target/arm/pr50099.c: New test.
+
 2011-09-12  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from FSF mainline:
@@ -189,7 +212,6 @@
 2011-09-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	gcc/
-
 	2011-08-12  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	PR target/48328
