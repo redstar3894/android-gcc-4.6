@@ -17494,10 +17494,10 @@ arm_elf_asm_destructor (rtx symbol, int priority)
    decremented/zeroed by arm_asm_output_opcode as the insns are output.  */
 
 /* Returns the index of the ARM condition code string in
-   `arm_condition_codes', or ARM_NV if the comparison is invalid.
-   COMPARISON should be an rtx like `(eq (...) (...))'.  */
-enum arm_cond_code
-maybe_get_arm_condition_code (rtx comparison)
+   `arm_condition_codes'.  COMPARISON should be an rtx like
+   `(eq (...) (...))'.  */
+static enum arm_cond_code
+get_arm_condition_code (rtx comparison)
 {
   enum machine_mode mode = GET_MODE (XEXP (comparison, 0));
   enum arm_cond_code code;
@@ -17521,11 +17521,11 @@ maybe_get_arm_condition_code (rtx comparison)
     case CC_DLTUmode: code = ARM_CC;
 
     dominance:
+      gcc_assert (comp_code == EQ || comp_code == NE);
+
       if (comp_code == EQ)
 	return ARM_INVERSE_CONDITION_CODE (code);
-      if (comp_code == NE)
-	return code;
-      return ARM_NV;
+      return code;
 
     case CC_NOOVmode:
       switch (comp_code)
@@ -17534,7 +17534,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	case EQ: return ARM_EQ;
 	case GE: return ARM_PL;
 	case LT: return ARM_MI;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_Zmode:
@@ -17542,7 +17542,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	{
 	case NE: return ARM_NE;
 	case EQ: return ARM_EQ;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_Nmode:
@@ -17550,7 +17550,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	{
 	case NE: return ARM_MI;
 	case EQ: return ARM_PL;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CCFPEmode:
@@ -17575,7 +17575,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	  /* UNEQ and LTGT do not have a representation.  */
 	case UNEQ: /* Fall through.  */
 	case LTGT: /* Fall through.  */
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_SWPmode:
@@ -17591,7 +17591,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	case GTU: return ARM_CC;
 	case LEU: return ARM_CS;
 	case LTU: return ARM_HI;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_Cmode:
@@ -17599,7 +17599,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	{
 	case LTU: return ARM_CS;
 	case GEU: return ARM_CC;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_CZmode:
@@ -17611,7 +17611,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	case GTU: return ARM_HI;
 	case LEU: return ARM_LS;
 	case LTU: return ARM_CC;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CC_NCVmode:
@@ -17621,7 +17621,7 @@ maybe_get_arm_condition_code (rtx comparison)
 	case LT: return ARM_LT;
 	case GEU: return ARM_CS;
 	case LTU: return ARM_CC;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     case CCmode:
@@ -17637,20 +17637,11 @@ maybe_get_arm_condition_code (rtx comparison)
 	case GTU: return ARM_HI;
 	case LEU: return ARM_LS;
 	case LTU: return ARM_CC;
-	default: return ARM_NV;
+	default: gcc_unreachable ();
 	}
 
     default: gcc_unreachable ();
     }
-}
-
-/* Like maybe_get_arm_condition_code, but never return ARM_NV.  */
-static enum arm_cond_code
-get_arm_condition_code (rtx comparison)
-{
-  enum arm_cond_code code = maybe_get_arm_condition_code (comparison);
-  gcc_assert (code != ARM_NV);
-  return code;
 }
 
 /* Tell arm_asm_output_opcode to output IT blocks for conditionally executed

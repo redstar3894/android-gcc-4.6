@@ -1,3 +1,22 @@
+2011-09-15  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	Revert:
+
+	gcc/
+	PR target/49030
+	* config/arm/arm-protos.h (maybe_get_arm_condition_code): Declare.
+	* config/arm/arm.c (maybe_get_arm_condition_code): New function,
+	reusing the old code from get_arm_condition_code.  Return ARM_NV
+	for invalid comparison codes.
+	(get_arm_condition_code): Redefine in terms of
+	maybe_get_arm_condition_code.
+	* config/arm/predicates.md (arm_comparison_operator): Use
+	maybe_get_arm_condition_code.
+
+	gcc/testsuite/
+	PR target/49030
+	* gcc.dg/torture/pr49030.c: New test.
+
 2011-09-13  Andrew Stubbs  <ams@codesourcery.com>
 
 	gcc/
