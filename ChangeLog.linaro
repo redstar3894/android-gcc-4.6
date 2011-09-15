@@ -1,5 +1,12 @@
 2011-09-15  Richard Sandiford  <richard.sandiford@linaro.org>
 
+	GCC Linaro 4.6-2011.09-1 released.
+
+	gcc/
+	* LINARO-VERSION: Update.
+
+2011-09-15  Richard Sandiford  <richard.sandiford@linaro.org>
+
 	Revert:
 
 	gcc/
