@@ -1,3 +1,12 @@
+2011-09-22  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
+	Backport from trunk -r178804:
+	modulo-sched.c (remove_node_from_ps): Return void
+	instead of bool.
+	(optimize_sc): Adjust call to remove_node_from_ps.
+	(sms_schedule): Add print info.
+
 2011-09-16  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/
