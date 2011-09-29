@@ -5567,6 +5567,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
   /* Optimize SUBREG truncations of zero and sign extended values.  */
   if ((GET_CODE (op) == ZERO_EXTEND
        || GET_CODE (op) == SIGN_EXTEND)
+      && SCALAR_INT_MODE_P (innermode)
       && GET_MODE_BITSIZE (outermode) < GET_MODE_BITSIZE (innermode))
     {
       unsigned int bitpos = subreg_lsb_1 (outermode, innermode, byte);
@@ -5605,6 +5606,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
   if ((GET_CODE (op) == LSHIFTRT
        || GET_CODE (op) == ASHIFTRT)
       && SCALAR_INT_MODE_P (outermode)
+      && SCALAR_INT_MODE_P (innermode)
       /* Ensure that OUTERMODE is at least twice as wide as the INNERMODE
 	 to avoid the possibility that an outer LSHIFTRT shifts by more
 	 than the sign extension's sign_bit_copies and introduces zeros
@@ -5624,6 +5626,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
   if ((GET_CODE (op) == LSHIFTRT
        || GET_CODE (op) == ASHIFTRT)
       && SCALAR_INT_MODE_P (outermode)
+      && SCALAR_INT_MODE_P (innermode)
       && GET_MODE_BITSIZE (outermode) < GET_MODE_BITSIZE (innermode)
       && CONST_INT_P (XEXP (op, 1))
       && GET_CODE (XEXP (op, 0)) == ZERO_EXTEND
@@ -5638,6 +5641,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
      the outer subreg is effectively a truncation to the original mode.  */
   if (GET_CODE (op) == ASHIFT
       && SCALAR_INT_MODE_P (outermode)
+      && SCALAR_INT_MODE_P (innermode)
       && GET_MODE_BITSIZE (outermode) < GET_MODE_BITSIZE (innermode)
       && CONST_INT_P (XEXP (op, 1))
       && (GET_CODE (XEXP (op, 0)) == ZERO_EXTEND
@@ -5651,7 +5655,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
   /* Recognize a word extraction from a multi-word subreg.  */
   if ((GET_CODE (op) == LSHIFTRT
        || GET_CODE (op) == ASHIFTRT)
-      && SCALAR_INT_MODE_P (outermode)
+      && SCALAR_INT_MODE_P (innermode)
       && GET_MODE_BITSIZE (outermode) >= BITS_PER_WORD
       && GET_MODE_BITSIZE (innermode) >= (2 * GET_MODE_BITSIZE (outermode))
       && CONST_INT_P (XEXP (op, 1))
@@ -5673,6 +5677,7 @@ simplify_subreg (enum machine_mode outermode, rtx op,
 
   if ((GET_CODE (op) == LSHIFTRT
        || GET_CODE (op) == ASHIFTRT)
+      && SCALAR_INT_MODE_P (innermode)
       && MEM_P (XEXP (op, 0))
       && CONST_INT_P (XEXP (op, 1))
       && GET_MODE_SIZE (outermode) < GET_MODE_SIZE (GET_MODE (op))
