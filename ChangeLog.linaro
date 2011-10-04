@@ -1,3 +1,21 @@
+2011-10-01  Revital Eres  <revital.eres@linaro.org> 
+
+	gcc/
+	Backport from mainline -r179380 and -r179381
+
+	* ddg.c (autoinc_var_is_used_p): New function.
+	(create_ddg_dep_from_intra_loop_link,
+	add_cross_iteration_register_deps): Call it.
+	* ddg.h (autoinc_var_is_used_p): Declare.
+	* modulo-sched.c (sms_schedule): Handle instructions with REG_INC.
+	(generate_reg_moves): Call autoinc_var_is_used_p.  Skip
+	instructions that do not set a register and verify no regmoves
+	are created for !single_set instructions.
+
+	gcc/testsuite/
+
+	* gcc.dg/sms-10.c: New file
+
 2011-09-28  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/
