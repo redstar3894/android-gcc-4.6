@@ -1,3 +1,42 @@
+2011-10-06  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from mainline:
+
+	2011-09-25  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-data-ref.c (dr_analyze_innermost): Add new argument.
+	Allow not simple iv if analyzing basic block.
+	(create_data_ref): Update call to dr_analyze_innermost.
+	(stmt_with_adjacent_zero_store_dr_p, ref_base_address): Likewise.
+	* tree-loop-distribution.c (generate_memset_zero): Likewise.
+	* tree-predcom.c (find_looparound_phi): Likewise.
+	* tree-data-ref.h (dr_analyze_innermost): Add new argument.
+
+	gcc/testsuite/
+	* gcc.dg/vect/bb-slp-24.c: New.
+
+
+	2011-09-15  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-vect-data-refs.c (vect_analyze_data_ref_dependence): Allow
+	read-after-read dependencies in basic block SLP.
+
+	gcc/testsuite/
+	* gcc.dg/vect/bb-slp-25.c: New.
+
+
+	2011-04-21  Richard Sandiford  <richard.sandiford@linaro.org>
+
+	gcc/
+	* tree-vect-data-refs.c (vect_drs_dependent_in_basic_block): Use
+	operand_equal_p to compare DR_BASE_ADDRESSes.
+	(vect_check_interleaving): Likewise.
+
+	gcc/testsuite/
+	* gcc.dg/vect/vect-119.c: New test.
+
 2011-10-03  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/
