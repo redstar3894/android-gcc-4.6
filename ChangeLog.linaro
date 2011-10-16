@@ -1,3 +1,37 @@
+2011-10-16  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from mainline:
+
+	2011-09-27  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-vect-stmts.c (vectorizable_type_demotion): Handle basic block
+	vectorization.
+	(vectorizable_type_promotion): Likewise.
+	(vect_analyze_stmt): Call vectorizable_type_demotion and
+	vectorizable_type_promotion for basic blocks.
+	(supportable_widening_operation): Don't assume loop vectorization.
+	* tree-vect-slp.c (vect_build_slp_tree): Allow multiple types for
+	basic blocks.  Update vectorization factor for basic block
+	vectorization.
+	(vect_analyze_slp_instance): Allow multiple types for basic block
+	vectorization.  Recheck unrolling factor after construction of SLP
+	instance.
+
+	gcc/testsuite/
+	* gcc.dg/vect/bb-slp-11.c: Expect to get vectorized with 64-bit
+	vectors.
+	* gcc.dg/vect/bb-slp-27.c: New.
+	* gcc.dg/vect/bb-slp-28.c: New.
+
+
+	2011-10-04  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/testsuite/
+	* lib/target-supports.exp (check_effective_target_vect_multiple_sizes):
+	Make et_vect_multiple_sizes_saved global.
+	(check_effective_target_vect64): Make et_vect64_saved global.
+
 2011-10-13  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from mainline:
