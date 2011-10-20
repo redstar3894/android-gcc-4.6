@@ -48,6 +48,11 @@ march=
 Target RejectNegative Joined
 Specify the name of the target architecture
 
+; Other arm_arch values are loaded from arm-tables.opt
+; but that is a generated file and this is an odd-one-out.
+EnumValue
+Enum(arm_arch) String(native) Value(-1) DriverOnly
+
 marm
 Target RejectNegative InverseMask(THUMB) Undocumented
 
@@ -152,6 +157,11 @@ Thumb: Generate (leaf) stack frames even if not needed
 mtune=
 Target RejectNegative Joined
 Tune code for the given processor
+
+; Other processor_type values are loaded from arm-tables.opt
+; but that is a generated file and this is an odd-one-out.
+EnumValue
+Enum(processor_type) String(native) Value(-1) DriverOnly
 
 mwords-little-endian
 Target Report RejectNegative Mask(LITTLE_WORDS)

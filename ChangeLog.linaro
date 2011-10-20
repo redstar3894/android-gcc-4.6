@@ -1,6 +1,30 @@
 2011-10-19  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from FSF:
+	
+	2011-10-18  Andrew Stubbs  <ams@codesourcery.com>
+
+	* config/arm/driver-arm.c (host_detect_local_cpu): Close the file
+	before exiting.
+
+	2011-10-18  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/
+	* config.host (arm*-*-linux*): Add driver-arm.o and x-arm.
+	* config/arm/arm.opt: Add 'native' processor_type and
+	arm_arch enum values.
+	* config/arm/arm.h (host_detect_local_cpu): New prototype.
+	(EXTRA_SPEC_FUNCTIONS): New define.
+	(MCPU_MTUNE_NATIVE_SPECS): New define.
+	(DRIVER_SELF_SPECS): New define.
+	* config/arm/driver-arm.c: New file.
+	* config/arm/x-arm: New file.
+	* doc/invoke.texi (ARM Options): Document -mcpu=native,
+	-mtune=native and -march=native.
+
+2011-10-19  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF:
 
 	2011-09-09  Andrew Stubbs  <ams@codesourcery.com>
 
