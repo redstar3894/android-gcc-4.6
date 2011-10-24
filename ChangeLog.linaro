@@ -1,3 +1,14 @@
+2011-10-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	Backport from FSF mainline:
+	
+	2011-10-21  Andrew Stubbs  <ams@codesourcery.com>
+
+	PR target/50809
+
+	gcc/
+	* config/arm/driver-arm.c (vendors): Make static.
+
 2011-10-19  Andrew Stubbs  <ams@codesourcery.com>
 
 	Backport from FSF:
