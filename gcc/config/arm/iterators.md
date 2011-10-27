@@ -388,6 +388,9 @@
 (define_mode_attr qhs_extenddi_cstr [(SI "r") (HI "rm") (QI "rUq")])
 (define_mode_attr qhs_zextenddi_cstr [(SI "r") (HI "rm") (QI "rm")])
 
+;; Mode attribute for vshll.
+(define_mode_attr V_innermode [(V8QI "QI") (V4HI "HI") (V2SI "SI")])
+
 ;;----------------------------------------------------------------------------
 ;; Code attributes
 ;;----------------------------------------------------------------------------
