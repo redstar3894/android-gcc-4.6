@@ -1,3 +1,7 @@
+2011-10-26  Andrew Stubbs  <ams@codesourcery.com>
+
+	Merge FSF GCC 4.6.2 Release (svn branches/gcc-4_6-branch 180515).
+
 2011-10-27  Ira Rosen  <ira.rosen@linaro.org>
 
 	Backport from mainline:
