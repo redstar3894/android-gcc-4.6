@@ -1,3 +1,13 @@
+2011-11-04  Revital Eres  <revital.eres@linaro.org>
+
+	Backport from mainline -r180673:
+
+	gcc/
+	* modulo-sched.c (generate_prolog_epilog): Mark prolog
+	and epilog as BB_DISABLE_SCHEDULE.
+	(mark_loop_unsched): New function.
+	(sms_schedule): Call it.
+
 2011-10-26  Andrew Stubbs  <ams@codesourcery.com>
 
 	Merge FSF GCC 4.6.2 Release (svn branches/gcc-4_6-branch 180515).
