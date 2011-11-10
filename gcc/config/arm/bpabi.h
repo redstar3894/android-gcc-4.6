@@ -56,7 +56,8 @@
   "|march=armv4|mcpu=fa526|mcpu=fa626:--fix-v4bx}"
 
 #define BE8_LINK_SPEC " %{mbig-endian:%{march=armv7-a|mcpu=cortex-a5"\
-  "|mcpu=cortex-a8|mcpu=cortex-a9|mcpu=cortex-a15:%{!r:--be8}}}"
+  "|mcpu=cortex-a8|mcpu=cortex-a9|mcpu=cortex-a15|mcpu=generic-armv7-a"\
+  ":%{!r:--be8}}}"
 
 /* Tell the assembler to build BPABI binaries.  */
 #undef  SUBTARGET_EXTRA_ASM_SPEC
