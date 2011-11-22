@@ -655,20 +655,40 @@ vect_mark_stmts_to_be_vectorized (loop_vec_info loop_vinfo)
               tree rhs = gimple_assign_rhs1 (stmt);
               unsigned int op_num;
               tree op;
+	      enum tree_code rhs_code;
               switch (get_gimple_rhs_class (gimple_assign_rhs_code (stmt)))
                 {
                   case GIMPLE_SINGLE_RHS:
-                     op_num = TREE_OPERAND_LENGTH (gimple_assign_rhs1 (stmt));
-                     for (i = 0; i < op_num; i++)
-                       {
-                         op = TREE_OPERAND (rhs, i);
-                         if (!process_use (stmt, op, loop_vinfo, live_p, relevant,
-                                           &worklist))
-                           {
-                             VEC_free (gimple, heap, worklist);
-                             return false;
-                           }
-                       }
+                    op = gimple_assign_rhs1 (stmt);
+                    rhs_code = gimple_assign_rhs_code (stmt);
+		    i = 0;
+		    if (rhs_code == COND_EXPR
+			&& COMPARISON_CLASS_P (TREE_OPERAND (op, 0)))
+		      {
+			op = TREE_OPERAND (op, 0);
+			if (!process_use (stmt, TREE_OPERAND (op, 0),
+				   	  loop_vinfo,
+					  live_p, relevant, &worklist)
+			    || !process_use (stmt, TREE_OPERAND (op, 1),
+				   	 loop_vinfo,
+				         live_p, relevant, &worklist))
+		    	  {
+			    VEC_free (gimple, heap, worklist);
+			    return false;
+			  }
+		  	i = 1;
+		      }
+                    op_num = TREE_OPERAND_LENGTH (gimple_assign_rhs1 (stmt));
+                    for (i; i < op_num; i++)
+                      {
+                        op = TREE_OPERAND (rhs, i);
+                        if (!process_use (stmt, op, loop_vinfo, live_p, relevant,
+                                          &worklist))
+                          {
+                            VEC_free (gimple, heap, worklist);
+                            return false;
+                          }
+                      }
                     break;
                    
                   case GIMPLE_BINARY_RHS:

@@ -1,3 +1,52 @@
+2011-11-22  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from mainline:
+
+	2011-10-06  Jakub Jelinek  <jakub@redhat.com>
+
+	gcc/
+	PR tree-optimization/50596
+	* tree-vectorizer.h (vect_is_simple_cond): New prototype.
+	(NUM_PATTERNS): Change to 6.
+	* tree-vect-patterns.c (vect_recog_mixed_size_cond_pattern): New
+	function.
+	(vect_vect_recog_func_ptrs): Add vect_recog_mixed_size_cond_pattern.
+	(vect_mark_pattern_stmts): Don't create stmt_vinfo for def_stmt
+	if it already has one, and don't set STMT_VINFO_VECTYPE in it
+	if it is already set.
+	* tree-vect-stmts.c (vect_mark_stmts_to_be_vectorized): Handle
+	COND_EXPR in pattern stmts.
+	(vect_is_simple_cond): No longer static.
+
+	gcc/testsuite:
+	PR tree-optimization/50596
+	* gcc.dg/vect/vect-cond-8.c: New test.
+
+	2011-10-07  Jakub Jelinek  <jakub@redhat.com>
+
+	gcc/
+	PR tree-optimization/50650
+	* tree-vect-patterns.c (vect_recog_mixed_size_cond_pattern): Don't
+	call vect_is_simple_cond here, instead fail if cond_expr isn't
+	COMPARISON_CLASS_P or if get_vectype_for_scalar_type returns NULL
+	for cond_expr's first operand.
+	* tree-vect-stmts.c (vect_is_simple_cond): Static again.
+	* tree-vectorizer.h (vect_is_simple_cond): Remove prototype.
+
+
+	gcc/
+	* tree-vect-patterns.c (vect_recog_mixed_size_cond_pattern): Reduce
+	it to integral types only.
+
+	gcc/testsuite/
+	* gcc.dg/vect/pr30858.c: Expect the error message twice for targets
+	with multiple vector sizes.
+	* gcc.dg/vect/vect-cond-8.c: Rename to...
+	* gcc.dg/vect/vect-cond-8a.c: ... this and change the type from float
+	to int.
+	* lib/target-supports.exp (check_effective_target_vect_condition):
+	Return true for NEON.
+
 2011-11-21  Michael Hope  <michael.hope@linaro.org>
 
 	Backport from mainline r180131:
