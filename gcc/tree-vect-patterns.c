@@ -83,11 +83,13 @@ widened_name_p (tree name, gimple use_stmt, tree *half_type, gimple *def_stmt,
   tree oprnd0;
   enum vect_def_type dt;
   tree def;
+  bb_vec_info bb_vinfo;
 
   stmt_vinfo = vinfo_for_stmt (use_stmt);
   loop_vinfo = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
+  bb_vinfo = STMT_VINFO_BB_VINFO (stmt_vinfo);
 
-  if (!vect_is_simple_use (name, loop_vinfo, NULL, def_stmt, &def, &dt))
+  if (!vect_is_simple_use (name, loop_vinfo, bb_vinfo, def_stmt, &def, &dt))
     return false;
 
   if (dt != vect_internal_def
@@ -111,7 +113,7 @@ widened_name_p (tree name, gimple use_stmt, tree *half_type, gimple *def_stmt,
       || (TYPE_PRECISION (type) < (TYPE_PRECISION (*half_type) * 2)))
     return false;
 
-  if (!vect_is_simple_use (oprnd0, loop_vinfo, NULL, &dummy_gimple, &dummy,
+  if (!vect_is_simple_use (oprnd0, loop_vinfo, bb_vinfo, &dummy_gimple, &dummy,
                            &dt))
     return false;
 
@@ -188,8 +190,13 @@ vect_recog_dot_prod_pattern (VEC (gimple, heap) **stmts, tree *type_in,
   gimple pattern_stmt;
   tree prod_type;
   loop_vec_info loop_info = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
-  struct loop *loop = LOOP_VINFO_LOOP (loop_info);
+  struct loop *loop;
   tree var, rhs;
+
+  if (!loop_info)
+    return NULL;
+
+  loop = LOOP_VINFO_LOOP (loop_info);
 
   if (!is_gimple_assign (last_stmt))
     return NULL;
@@ -358,8 +365,16 @@ vect_handle_widen_op_by_const (gimple stmt, enum tree_code code,
 {
   tree new_type, new_oprnd, tmp;
   gimple new_stmt;
-  loop_vec_info loop_info = STMT_VINFO_LOOP_VINFO (vinfo_for_stmt (stmt));
-  struct loop *loop = LOOP_VINFO_LOOP (loop_info);
+  loop_vec_info loop_vinfo;
+  struct loop *loop = NULL;
+  bb_vec_info bb_vinfo;
+  stmt_vec_info stmt_vinfo;
+
+  stmt_vinfo = vinfo_for_stmt (stmt);
+  loop_vinfo = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
+  bb_vinfo = STMT_VINFO_BB_VINFO (stmt_vinfo);
+  if (loop_vinfo)
+    loop = LOOP_VINFO_LOOP (loop_vinfo);
 
   if (code != MULT_EXPR && code != LSHIFT_EXPR)
     return false;
@@ -377,7 +392,9 @@ vect_handle_widen_op_by_const (gimple stmt, enum tree_code code,
 
   if (TYPE_PRECISION (type) < (TYPE_PRECISION (*half_type) * 4)
       || !gimple_bb (def_stmt)
-      || !flow_bb_inside_loop_p (loop, gimple_bb (def_stmt))
+      || (loop && !flow_bb_inside_loop_p (loop, gimple_bb (def_stmt)))
+      || (!loop && gimple_bb (def_stmt) != BB_VINFO_BB (bb_vinfo)
+          && gimple_code (def_stmt) != GIMPLE_PHI)
       || !vinfo_for_stmt (def_stmt))
     return false;
 
@@ -774,8 +791,13 @@ vect_recog_widen_sum_pattern (VEC (gimple, heap) **stmts, tree *type_in,
   tree type, half_type;
   gimple pattern_stmt;
   loop_vec_info loop_info = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
-  struct loop *loop = LOOP_VINFO_LOOP (loop_info);
+  struct loop *loop;
   tree var;
+
+  if (!loop_info)
+    return NULL;
+
+  loop = LOOP_VINFO_LOOP (loop_info);
 
   if (!is_gimple_assign (last_stmt))
     return NULL;
@@ -877,7 +899,11 @@ vect_operation_fits_smaller_type (gimple stmt, tree def, tree *new_type,
   gimple def_stmt, new_stmt;
   bool first = false;
   loop_vec_info loop_info = STMT_VINFO_LOOP_VINFO (vinfo_for_stmt (stmt));
-  struct loop *loop = LOOP_VINFO_LOOP (loop_info);
+  bb_vec_info bb_info = STMT_VINFO_BB_VINFO (vinfo_for_stmt (stmt));
+  struct loop *loop = NULL;
+
+  if (loop_info)
+    loop = LOOP_VINFO_LOOP (loop_info);
 
   *new_def_stmt = NULL;
 
@@ -909,7 +935,9 @@ vect_operation_fits_smaller_type (gimple stmt, tree def, tree *new_type,
       first = true;
       if (!widened_name_p (oprnd, stmt, &half_type, &def_stmt, false)
           || !gimple_bb (def_stmt)
-          || !flow_bb_inside_loop_p (loop, gimple_bb (def_stmt))
+          || (loop && !flow_bb_inside_loop_p (loop, gimple_bb (def_stmt)))
+	  || (!loop && gimple_bb (def_stmt) != BB_VINFO_BB (bb_info)
+	      && gimple_code (def_stmt) != GIMPLE_PHI)
           || !vinfo_for_stmt (def_stmt))
         return false;
     }
@@ -1087,7 +1115,16 @@ vect_recog_over_widening_pattern (VEC (gimple, heap) **stmts,
   int nuses = 0;
   tree var = NULL_TREE, new_type = NULL_TREE, tmp, new_oprnd;
   bool first;
-  struct loop *loop = (gimple_bb (stmt))->loop_father;
+  loop_vec_info loop_vinfo;
+  struct loop *loop = NULL;
+  bb_vec_info bb_vinfo;
+  stmt_vec_info stmt_vinfo;
+
+  stmt_vinfo = vinfo_for_stmt (stmt);
+  loop_vinfo = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
+  bb_vinfo = STMT_VINFO_BB_VINFO (stmt_vinfo);
+  if (loop_vinfo)
+    loop = LOOP_VINFO_LOOP (loop_vinfo);
 
   first = true;
   while (1)
@@ -1120,7 +1157,8 @@ vect_recog_over_widening_pattern (VEC (gimple, heap) **stmts,
 
       if (nuses != 1 || !is_gimple_assign (use_stmt)
           || !gimple_bb (use_stmt)
-          || !flow_bb_inside_loop_p (loop, gimple_bb (use_stmt)))
+          || (loop && !flow_bb_inside_loop_p (loop, gimple_bb (use_stmt)))
+	  || (!loop && gimple_bb (use_stmt) != BB_VINFO_BB (bb_vinfo)))
         return NULL;
 
       /* Create pattern statement for STMT.  */
@@ -1485,6 +1523,7 @@ vect_recog_mixed_size_cond_pattern (VEC (gimple, heap) **stmts, tree *type_in,
   enum machine_mode cmpmode;
   gimple pattern_stmt, def_stmt;
   loop_vec_info loop_vinfo = STMT_VINFO_LOOP_VINFO (stmt_vinfo);
+  bb_vec_info bb_vinfo = STMT_VINFO_BB_VINFO (stmt_vinfo);
 
   if (!is_gimple_assign (last_stmt)
       || gimple_assign_rhs_code (last_stmt) != COND_EXPR
@@ -1538,7 +1577,8 @@ vect_recog_mixed_size_cond_pattern (VEC (gimple, heap) **stmts, tree *type_in,
   tmp = build3 (COND_EXPR, comp_type, unshare_expr (cond_expr),
 		fold_convert (comp_type, then_clause),
 	       	fold_convert (comp_type, else_clause));
-  def_stmt = gimple_build_assign (vect_recog_temp_ssa_var (comp_type, NULL), tmp);
+  def_stmt = gimple_build_assign (vect_recog_temp_ssa_var (comp_type, NULL),
+				  tmp);
 
   pattern_stmt
     = gimple_build_assign_with_ops (NOP_EXPR,
@@ -1546,11 +1586,14 @@ vect_recog_mixed_size_cond_pattern (VEC (gimple, heap) **stmts, tree *type_in,
 				    gimple_assign_lhs (def_stmt), NULL_TREE);
 
   STMT_VINFO_PATTERN_DEF_STMT (stmt_vinfo) = def_stmt;
-  def_stmt_info = new_stmt_vec_info (def_stmt, loop_vinfo, NULL);
+  def_stmt_info = new_stmt_vec_info (def_stmt, loop_vinfo, bb_vinfo);
   set_vinfo_for_stmt (def_stmt, def_stmt_info);
   STMT_VINFO_VECTYPE (def_stmt_info) = comp_vectype;
   *type_in = vectype;
   *type_out = vectype;
+
+  if (vect_print_dump_info (REPORT_DETAILS))
+    fprintf (vect_dump, "vect_recog_mixed_size_cond_pattern: detected: ");
 
   return pattern_stmt;
 }
@@ -1565,10 +1608,11 @@ vect_mark_pattern_stmts (gimple orig_stmt, gimple pattern_stmt,
   stmt_vec_info pattern_stmt_info, def_stmt_info;
   stmt_vec_info orig_stmt_info = vinfo_for_stmt (orig_stmt);
   loop_vec_info loop_vinfo = STMT_VINFO_LOOP_VINFO (orig_stmt_info);
+  bb_vec_info bb_vinfo = STMT_VINFO_BB_VINFO (orig_stmt_info);
   gimple def_stmt;
 
   set_vinfo_for_stmt (pattern_stmt,
-                      new_stmt_vec_info (pattern_stmt, loop_vinfo, NULL));
+                      new_stmt_vec_info (pattern_stmt, loop_vinfo, bb_vinfo));
   gimple_set_bb (pattern_stmt, gimple_bb (orig_stmt));
   pattern_stmt_info = vinfo_for_stmt (pattern_stmt);
 
@@ -1586,7 +1630,7 @@ vect_mark_pattern_stmts (gimple orig_stmt, gimple pattern_stmt,
       def_stmt_info = vinfo_for_stmt (def_stmt);
       if (def_stmt_info == NULL)
 	{
-	  def_stmt_info = new_stmt_vec_info (def_stmt, loop_vinfo, NULL);
+	  def_stmt_info = new_stmt_vec_info (def_stmt, loop_vinfo, bb_vinfo);
 	  set_vinfo_for_stmt (def_stmt, def_stmt_info);
 	}
       gimple_set_bb (def_stmt, gimple_bb (orig_stmt));
@@ -1697,9 +1741,10 @@ vect_pattern_recog_1 (
 
   /* Patterns cannot be vectorized using SLP, because they change the order of
      computation.  */
-  FOR_EACH_VEC_ELT (gimple, LOOP_VINFO_REDUCTIONS (loop_vinfo), i, next)
-    if (next == stmt)
-      VEC_ordered_remove (gimple, LOOP_VINFO_REDUCTIONS (loop_vinfo), i); 
+  if (loop_vinfo)
+    FOR_EACH_VEC_ELT (gimple, LOOP_VINFO_REDUCTIONS (loop_vinfo), i, next)
+      if (next == stmt)
+        VEC_ordered_remove (gimple, LOOP_VINFO_REDUCTIONS (loop_vinfo), i);
 
   /* It is possible that additional pattern stmts are created and inserted in
      STMTS_TO_REPLACE.  We create a stmt_info for each of them, and mark the
@@ -1799,26 +1844,46 @@ vect_pattern_recog_1 (
    be recorded in S3.  */
 
 void
-vect_pattern_recog (loop_vec_info loop_vinfo)
+vect_pattern_recog (loop_vec_info loop_vinfo, bb_vec_info bb_vinfo)
 {
-  struct loop *loop = LOOP_VINFO_LOOP (loop_vinfo);
-  basic_block *bbs = LOOP_VINFO_BBS (loop_vinfo);
-  unsigned int nbbs = loop->num_nodes;
+  struct loop *loop;
+  basic_block *bbs, bb;
+  unsigned int nbbs;
   gimple_stmt_iterator si;
   unsigned int i, j;
   gimple (* vect_recog_func_ptr) (VEC (gimple, heap) **, tree *, tree *);
   VEC (gimple, heap) *stmts_to_replace = VEC_alloc (gimple, heap, 1);
+  gimple stmt;
 
   if (vect_print_dump_info (REPORT_DETAILS))
     fprintf (vect_dump, "=== vect_pattern_recog ===");
 
-  /* Scan through the loop stmts, applying the pattern recognition
+  if (loop_vinfo)
+    {
+      loop = LOOP_VINFO_LOOP (loop_vinfo);
+      bbs = LOOP_VINFO_BBS (loop_vinfo);
+      nbbs = loop->num_nodes;
+    }
+  else
+    {
+      bb = BB_VINFO_BB (bb_vinfo);
+      nbbs = 1;
+      bbs = XNEW (basic_block);
+      bbs[0] = bb;
+    }
+
+  /* Scan through the stmts, applying the pattern recognition
      functions starting at each stmt visited:  */
   for (i = 0; i < nbbs; i++)
     {
       basic_block bb = bbs[i];
       for (si = gsi_start_bb (bb); !gsi_end_p (si); gsi_next (&si))
         {
+	  if (bb_vinfo && (stmt = gsi_stmt (si))
+	      && vinfo_for_stmt (stmt)
+	      && !STMT_VINFO_VECTORIZABLE (vinfo_for_stmt (stmt)))
+	   continue;
+
           /* Scan over all generic vect_recog_xxx_pattern functions.  */
           for (j = 0; j < NUM_PATTERNS; j++)
             {
@@ -1830,4 +1895,6 @@ vect_pattern_recog (loop_vec_info loop_vinfo)
     }
 
   VEC_free (gimple, heap, stmts_to_replace);
+  if (bb_vinfo)
+    free (bbs);
 }

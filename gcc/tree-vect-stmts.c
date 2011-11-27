@@ -3451,11 +3451,11 @@ vectorizable_type_promotion (gimple stmt, gimple_stmt_iterator *gsi,
 	  /* For WIDEN_MULT_EXPR, if OP0 is a constant, use the type of
 	     OP1.  */
           if (CONSTANT_CLASS_P (op0))
-            ok = vect_is_simple_use_1 (op1, loop_vinfo, NULL,
+            ok = vect_is_simple_use_1 (op1, loop_vinfo, bb_vinfo,
                              &def_stmt, &def, &dt[1], &vectype_in);
           else
-            ok = vect_is_simple_use (op1, loop_vinfo, NULL, &def_stmt, &def,
-                                     &dt[1]);
+            ok = vect_is_simple_use (op1, loop_vinfo, bb_vinfo, &def_stmt,
+				     &def, &dt[1]);
 
           if (!ok)
             {

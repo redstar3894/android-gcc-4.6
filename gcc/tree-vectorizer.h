@@ -918,7 +918,7 @@ extern void vect_slp_transform_bb (basic_block);
    in the future.  */
 typedef gimple (* vect_recog_func_ptr) (VEC (gimple, heap) **, tree *, tree *);
 #define NUM_PATTERNS 7 
-void vect_pattern_recog (loop_vec_info);
+void vect_pattern_recog (loop_vec_info, bb_vec_info);
 
 /* In tree-vectorizer.c.  */
 unsigned vectorize_loops (void);

@@ -1,3 +1,31 @@
+2011-11-27777777  Ira Rosen  <ira.rosen@linaro.org>
+
+	gcc/
+	* tree-vectorizer.h (vect_pattern_recog): Add new argument.
+	* tree-vect-loop.c (vect_analyze_loop_2): Update call to
+	vect_pattern_recog.
+	* tree-vect-patterns.c (widened_name_p): Pass basic block
+	info to vect_is_simple_use.
+	(vect_recog_dot_prod_pattern): Fail for basic blocks.
+	(vect_recog_widen_sum_pattern): Likewise.
+	(vect_handle_widen_op_by_const): Support basic blocks.
+	(vect_operation_fits_smaller_type,
+	vect_recog_over_widening_pattern): Likewise.
+	(vect_recog_mixed_size_cond_pattern): Support basic blocks.
+	Add printing.
+	(vect_mark_pattern_stmts): Update calls to new_stmt_vec_info.
+	(vect_pattern_recog_1): Check for reduction only in loops.
+	(vect_pattern_recog): Add new argument.  Support basic blocks.
+	* tree-vect-stmts.c (vectorizable_conversion): Pass basic block
+	info to vect_is_simple_use_1.
+	* tree-vect-slp.c (vect_get_and_check_slp_defs): Support basic
+	blocks.
+	(vect_slp_analyze_bb_1): Call vect_pattern_recog.
+
+	gcc/testsuite/
+	* gcc.dg/vect/bb-slp-pattern-1.c: New test.
+	* gcc.dg/vect/bb-slp-pattern-2.c: New test.
+
 2011-11-22  Ira Rosen  <ira.rosen@linaro.org>
 
 	Backport from mainline:
