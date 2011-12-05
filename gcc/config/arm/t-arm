@@ -31,6 +31,16 @@ MD_INCLUDES= 	$(srcdir)/config/arm/arm-tune.md \
 		$(srcdir)/config/arm/fmp626.md \
 		$(srcdir)/config/arm/fa726te.md \
 		$(srcdir)/config/arm/arm926ejs.md \
+		$(srcdir)/config/arm/cortex-a15.md \
+		$(srcdir)/config/arm/cortex-a5.md \
+		$(srcdir)/config/arm/cortex-a8.md \
+		$(srcdir)/config/arm/cortex-a8-neon.md \
+		$(srcdir)/config/arm/cortex-a9.md \
+		$(srcdir)/config/arm/cortex-a9-neon.md \
+		$(srcdir)/config/arm/cortex-m4-fpu.md \
+		$(srcdir)/config/arm/cortex-m4.md \
+		$(srcdir)/config/arm/cortex-r4f.md \
+		$(srcdir)/config/arm/cortex-r4.md \
 		$(srcdir)/config/arm/cirrus.md \
 		$(srcdir)/config/arm/fpa.md \
 		$(srcdir)/config/arm/vec-common.md \
