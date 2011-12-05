@@ -1,49 +1,6 @@
-2011-12-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
+2011-12-01  Andrew Stubbs  <ams@codesourcery.com>
 
-	Backport from mainline -A15 tuning.
-	2011-11-30  Matthew Gretton-Dann  <matthew.gretton-dann@arm.com>
-
-	* config/arm/arm.c (arm_issue_rate): Cortex-A15 can triple issue.
-	* config/arm/arm.md (mul64): New attribute.
-	(generic_sched): Cortex-A15 is not scheduled generically.
-	(cortex-a15.md): Include.
-	* config/arm/cortex-a15.md: New machine description.
-	* config/arm/t-arm (MD_INCLUDES): Add cortex-a15.md.
-
-        2011-11-30  Matthew Gretton-Dann  <matthew.gretton-dann@arm.com>
-	* config/arm/t-arm (MD_INCLUDES): Ensure all md files are listed.
-
-2011-12-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
-
-	gcc/
-	* config/arm/arm.c (vfp3_const_double_for_fract_bits): Define.
-	* config/arm/arm-protos.h (vfp3_const_double_for_fract_bits): Declare.
-	* config/arm/constraints.md ("Dt"): New constraint.
-	* config/arm/predicates.md (const_double_vcvt_power_of_two_reciprocal):
-	New.
-	* config/arm/vfp.md (*arm_combine_vcvt_f32_s32): New.
-	(*arm_combine_vcvt_f32_u32): New.
-
-2011-11-27  Ira Rosen  <ira.rosen@linaro.org>
-
-	Needs to be merged upstream:
-
-	gcc/
-	* tree-vect-patterns.c (widened_name_p): Rename to ...
-	(type_conversion_p): ... this.  Add new argument to determine
-	if it's a promotion or demotion operation.  Check for
-	CONVERT_EXPR_CODE_P instead of NOP_EXPR.
-	(vect_recog_dot_prod_pattern): Call type_conversion_p instead
-	widened_name_p.
-	(vect_recog_widen_mult_pattern, vect_recog_widen_sum_pattern,
-	vect_operation_fits_smaller_type, vect_recog_widen_shift_pattern):
-	Likewise.
-	(vect_recog_mixed_size_cond_pattern): Likewise and allow
-	non-constant then and else clauses.
-
-	gcc/testsuite/
-	* gcc.dg/vect/bb-slp-cond-3.c: New test.
-	* gcc.dg/vect/bb-slp-cond-4.c: New test.
+	Merge from FSF GCC 4.6.2 (svn branches/gcc-4_6-branch 181866).
 
 2011-12-05  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
