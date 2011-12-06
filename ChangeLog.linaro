@@ -1,3 +1,10 @@
+2011-12-06  Andrew Stubbs  <ams@codesourcery.com>
+
+	GCC Linaro 4.6-2011.12 released.
+
+	gcc/
+	* LINARO-VERSION: Update.
+
 2011-12-06  Ramana Radhakrishnan  <ramana.radhakrishnan@linaro.org>
 
 	Revert earlier commit for fixed to floating point conversions.
