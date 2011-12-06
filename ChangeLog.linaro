@@ -1,5 +1,10 @@
 2011-12-06  Andrew Stubbs  <ams@codesourcery.com>
 
+	gcc/
+	* LINARO-VERSION: Bump version.
+
+2011-12-06  Andrew Stubbs  <ams@codesourcery.com>
+
 	GCC Linaro 4.6-2011.12 released.
 
 	gcc/
