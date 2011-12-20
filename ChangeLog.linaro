@@ -1,3 +1,18 @@
+2011-12-20  Ira Rosen  <ira.rosen@linaro.org>
+
+	Backport from mainline:
+
+	2011-11-29  Ira Rosen  <ira.rosen@linaro.org>
+
+	PR tree-optimization/51301
+	gcc/
+	* tree-vect-patterns.c (vect_recog_over_widening_pattern): Check that
+	the last statement doesn't convert to a bigger type than the original
+	type of the computation.
+
+	gcc/testsuite/
+	* gcc.dg/vect/pr51301.c: New test.
+
 2011-12-06  Andrew Stubbs  <ams@codesourcery.com>
 
 	gcc/
