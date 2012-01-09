@@ -7,6 +7,15 @@
 	gcc/
 	* modulo-sched.c (mark_loop_unsched): Free bbs.
 
+2012-01-05  Michael Hope  <michael.hope@linaro.org>
+
+	Backport from mainline r182271:
+
+	2011-12-13  Revital Eres  <revital.eres@linaro.org>
+
+	gcc/
+	* modulo-sched.c (mark_loop_unsched): Free bbs.
+
 2011-12-30  Richard Sandiford  <richard.sandiford@linaro.org>
 
 	gcc/
