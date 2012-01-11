@@ -1,6 +1,13 @@
-2012-01-05  Michael Hope  <michael.hope@linaro.org>
+2012-01-06  Andrew Stubbs  <ams@codesourcery.com>
 
-	Backport from mainline r182271:
+	Backport from mainline:
+
+	2012-01-06  Andrew Stubbs  <ams@codesourcery.com>
+
+	gcc/testsuite/
+	* gcc.target/arm/headmerge-2.c: Adjust scan pattern.
+
+2012-01-05  Andrew Stubbs  <ams@codesourcery.com>
 
 	2011-12-13  Revital Eres  <revital.eres@linaro.org>
 
